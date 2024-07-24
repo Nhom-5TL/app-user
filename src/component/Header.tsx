@@ -33,10 +33,10 @@ const Header = () => {
               <div className="menu-desktop">
                 <ul className="main-menu">
                   <li className="active-menu">
-                    <a href="/">Home</a>
+                    <a href="/">Trang Chủ</a>
                     <ul className="sub-menu">
                       <li>
-                        <a href="index.html">Trang Chủ</a>
+                        <a href="/">Trang Chủ</a>
                       </li>
                       <li>
                         <a href="home-02.html">Homepage 2</a>
@@ -47,7 +47,7 @@ const Header = () => {
                     </ul>
                   </li>
                   <li>
-                    <a href="/shop">Shop</a>
+                    <a href="/shop">Sản Phẩm</a>
                   </li>
                   <li className="label1" data-label1="hot">
                     <a href="shoping-cart.html">Features</a>
