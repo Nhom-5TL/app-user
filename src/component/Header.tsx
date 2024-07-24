@@ -36,7 +36,7 @@ const Header = () => {
                     <a href="/">Home</a>
                     <ul className="sub-menu">
                       <li>
-                        <a href="index.html">Homepage 1</a>
+                        <a href="index.html">Trang Chủ</a>
                       </li>
                       <li>
                         <a href="home-02.html">Homepage 2</a>
@@ -172,7 +172,7 @@ const Header = () => {
               <img src="images/icons/icon-close2.png" alt="CLOSE" />
             </button>
             <form className="wrap-search-header flex-w p-l-15">
-              <button className="flex-c-m trans-04">
+              <button  className="flex-c-m trans-04">
                 <i className="zmdi zmdi-search" />
               </button>
               <input className="plh3" type="text" name="search" placeholder="Search..." />
