@@ -109,7 +109,7 @@ const Header = () => {
         <div className="menu-mobile">
           <ul className="topbar-mobile">
             <li>
-              <div className="left-top-bar">Free shipping for standard order over $100</div>
+              <div className="left-top-bar">Giao hàng miễn phí cho đơn hàng tiêu chuẩn trên 100.000 VND</div>
             </li>
             <li>
               <div className="right-top-bar flex-w h-full">
