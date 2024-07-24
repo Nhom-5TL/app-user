@@ -33,10 +33,10 @@ const Header = () => {
               <div className="menu-desktop">
                 <ul className="main-menu">
                   <li className="active-menu">
-                    <a href="/">Home</a>
+                    <a href="/">Trang Chủ</a>
                     <ul className="sub-menu">
                       <li>
-                        <a href="index.html">Homepage 1</a>
+                        <a href="/">Trang Chủ</a>
                       </li>
                       <li>
                         <a href="home-02.html">Homepage 2</a>
@@ -47,7 +47,7 @@ const Header = () => {
                     </ul>
                   </li>
                   <li>
-                    <a href="/shop">Shop</a>
+                    <a href="/shop">Sản Phẩm</a>
                   </li>
                   <li className="label1" data-label1="hot">
                     <a href="shoping-cart.html">Features</a>
@@ -109,7 +109,7 @@ const Header = () => {
         <div className="menu-mobile">
           <ul className="topbar-mobile">
             <li>
-              <div className="left-top-bar">Free shipping for standard order over $100</div>
+              <div className="left-top-bar">Giao hàng miễn phí cho đơn hàng tiêu chuẩn trên 100.000 VND</div>
             </li>
             <li>
               <div className="right-top-bar flex-w h-full">
@@ -172,7 +172,7 @@ const Header = () => {
               <img src="images/icons/icon-close2.png" alt="CLOSE" />
             </button>
             <form className="wrap-search-header flex-w p-l-15">
-              <button className="flex-c-m trans-04">
+              <button  className="flex-c-m trans-04">
                 <i className="zmdi zmdi-search" />
               </button>
               <input className="plh3" type="text" name="search" placeholder="Search..." />
