@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import "./header.css"
 // import { getSanPhamAPI } from "../api/SanPhams"
 
 
@@ -7,15 +8,15 @@ import { useEffect, useState } from "react"
 //     console.log(data);
 // };
 const Header = () => {
-    const [showCard, setShowCard] = useState(false)
-    const [showHeaderCart, setShowHeaderCart] = useState("")
-    const handleShowCard = () => {
-      setShowCard(!showCard)
-      setShowHeaderCart("show-header-cart")
-    }
-    useEffect(() => {
-      // fetchData();
-    }, [])
+  const [showCard, setShowCard] = useState(false)
+  const [showHeaderCart, setShowHeaderCart] = useState("")
+  const handleShowCard = () => {
+    setShowCard(!showCard)
+    setShowHeaderCart("show-header-cart")
+  }
+  useEffect(() => {
+    // fetchData();
+  }, [])
 
   return (
     <>
@@ -65,8 +66,20 @@ const Header = () => {
               </div>
               {/* Icon header */}
               <div className="wrap-icon-header flex-w flex-r-m">
-                <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-                  <i className="zmdi zmdi-search" />
+                
+                <div>
+                  <div className="search-container">
+                    <input
+                      type="text"
+                      id="search-input"
+
+                      placeholder="Tìm kiếm..."
+                    />
+                    <button id="search-button" >
+                      <i className="fa fa-search"></i>
+                    </button>
+                  </div>
+                  <div id="search-results"></div>
                 </div>
                 <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" onClick={handleShowCard} data-notify={2}>
                   <i className="zmdi zmdi-shopping-cart" />
@@ -172,7 +185,7 @@ const Header = () => {
               <img src="images/icons/icon-close2.png" alt="CLOSE" />
             </button>
             <form className="wrap-search-header flex-w p-l-15">
-              <button  className="flex-c-m trans-04">
+              <button className="flex-c-m trans-04">
                 <i className="zmdi zmdi-search" />
               </button>
               <input className="plh3" type="text" name="search" placeholder="Search..." />
