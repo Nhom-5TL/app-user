@@ -7,6 +7,7 @@ import Home from './component/Home/Index';
 import Shop from './component/Shop/Index';
 import Card from './component/Card/Index';
 import Test from './component/Test';
+import Details from './component/Home/Product/Details'
 
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "test",
         element: <Test />
+      },
+      {
+        path: "/Details",
+        element: <Details />
       }
     ],
   },
