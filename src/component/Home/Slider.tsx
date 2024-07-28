@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import slide01 from '/src/assets/images/0.jpg';
-import slide02 from '/src/assets/images/02.jpg';
-import slide03 from '/src/assets/images/03.jpg';
+import slide01 from '/src/assets/images/dongho1.jpg';
+import slide02 from '/src/assets/images/dongho2.jpg';
+import slide03 from '/src/assets/images/dongho3.jpg';
 import './Slider.css';
 
 const ImageSlider = () => {
@@ -46,7 +46,7 @@ const ImageSlider = () => {
   };
 
   return (
-    <section className="section-slide">
+    <section className="section-slide" style={{marginTop:"70px"}}>
       <div className="slider">
         <div className="slides" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
           {slides.map((slide, index) => (

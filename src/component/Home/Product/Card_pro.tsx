@@ -75,4 +75,4 @@ if (loading) return <div>Loading...</div>;
   )
 }
 
-export default Card_pro
+export default Card_pro;
