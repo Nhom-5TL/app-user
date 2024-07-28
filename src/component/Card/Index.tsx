@@ -68,21 +68,7 @@ const Index = () => {
                             </div>
                           </td>
                           <td className="column-2">{item.tenSP}</td>
-                          <td className="column-2">{item.kichThuocs?.length ? item.kichThuocs.map((kt) =>(
-                           <button
-                           key={kt.maKT}
-                               style={{
-                                   border: kt.maKT === kt.maKT? '2px solid black' : 'none',
-                                   margin: '5px',
-                                   cursor: 'pointer',
-                                  //  display: selectedSize && !product.variants.some(v => v.kichThuoc === selectedSize && v.mauSac === variant.mauSac) ? 'none' : 'inline-block'
-                              
-                                 }}
-                           >
-                               {kt.tenKT}
-                           </button>
-                           
-                       )) : <span>No colors available</span>}</td>
+                          <td className="column-2">{item.tenKT}</td>
                           <td className="column-3">{item.gia} ₫</td>
                           <td className="column-4">
                             <div className="wrap-num-product flex-w m-l-auto m-r-0">
