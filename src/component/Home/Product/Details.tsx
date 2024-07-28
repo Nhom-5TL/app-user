@@ -4,7 +4,7 @@ import 'slick-carousel';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '/src/component/Home/Product/Details.css';
-import Card_pro from './Card_pro';
+// import Card_pro from './Card_pro';
 
 const Details = () => {
     useEffect(() => {
@@ -186,10 +186,10 @@ const Details = () => {
                     </div>
                     {/* Slide2 */}
                     <div className="row isotope-grid">
+            {/* <Card_pro />
             <Card_pro />
             <Card_pro />
-            <Card_pro />
-            <Card_pro />
+            <Card_pro /> */}
           </div>
                 </div>
             </section>
