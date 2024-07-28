@@ -226,13 +226,6 @@ const Product = () => {
           </div>
           <div className="row isotope-grid">
             <Card_pro />
-            <Card_pro />
-            <Card_pro />
-            <Card_pro />
-            <Card_pro />
-            <Card_pro />
-            <Card_pro />
-            <Card_pro />
           </div>
           {/* Load more */}
           <div className="flex-c-m flex-w w-full p-t-45">

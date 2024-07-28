@@ -32,7 +32,7 @@ const router = createBrowserRouter([
         element: <Test />
       },
       {
-        path: "/Details",
+        path: ":maSP",
         element: <Details />
       }
     ],
