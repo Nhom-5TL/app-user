@@ -7,7 +7,8 @@ import Home from './component/Home/Index';
 import Shop from './component/Shop/Index';
 import Card from './component/Card/Index';
 import Test from './component/Test';
-import Details from './component/Home/Product/Details'
+import Details from './component/Home/Product/Details';
+import DangKy from './component/Home/DangKy/DangKy';
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: ":maSP",
         element: <Details />
+      },
+      {
+        path: "/DangKy",
+        element: <DangKy />
       }
     ],
   },
