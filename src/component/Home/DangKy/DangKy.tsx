@@ -1,11 +1,52 @@
+import { useState, FormEvent} from 'react';
+import axios from 'axios'
 const DangKy = () => {
+
+    const [message, setMessage] = useState<string | null>(null);
+    const AddSP = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+    
+        const form = event.currentTarget as HTMLFormElement;
+    
+        const tenKH = (form.elements.namedItem("tenKH") as HTMLInputElement).value;
+        const sDT = (form.elements.namedItem("SDT") as HTMLInputElement).value;
+        const cCCD = (form.elements.namedItem("CCCD") as HTMLInputElement)
+          .value;
+        const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+        const tenDN = (form.elements.namedItem("tenDN") as HTMLInputElement)
+          .value;
+        const matKhau = (form.elements.namedItem("matKhau") as HTMLInputElement)
+          .value;
+    
+        const SanPhamViewModel = {
+            tenKH,
+            sDT,
+            cCCD,
+            email,
+            tenDN,
+            matKhau
+        };
+    
+        try {
+          const response = await axios.post(
+            "https://localhost:7095/api/KhachHangs",
+            SanPhamViewModel
+          );
+          if (response.status === 200) {
+            console.log(`Sản phẩm đã được thêm: ${response.data}`);
+            return response.data;
+          }
+        } catch (error) {
+          setMessage(`Lỗi: ${message}`);
+        }
+      };
     return(
         <>
         <section className="bg0 p-t-104 p-b-116">
   <div className="container">
     <div className="flex-w flex-tr">
       <div className="container size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-        <form>
+        <form onSubmit={AddSP}>
           <h4 className="mtext-105 cl2 txt-center p-b-30">Đăng Ký</h4>
           <label>Họ Và Tên: </label>
           <div className="bor8 m-b-20 how-pos4-parent">
