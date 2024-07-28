@@ -21,10 +21,10 @@ export default instance;
 
 
 // Sử dụng instance để thực hiện một yêu cầu GET
-instance.get('/SanPhams')
-    .then(data => { // Lưu ý: response.data đã được trả về từ interceptor
-        console.log(data); // Dữ liệu đã được xử lý bởi interceptor
-    })
-    .catch(error => {
-        console.error("There was an error!", error); // Xử lý lỗi
-    });
+// instance.get('/SanPhams')
+//     .then(data => { // Lưu ý: response.data đã được trả về từ interceptor
+//         console.log(data); // Dữ liệu đã được xử lý bởi interceptor
+//     })
+//     .catch(error => {
+//         console.error("There was an error!", error); // Xử lý lỗi
+//     });

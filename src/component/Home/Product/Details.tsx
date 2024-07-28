@@ -4,7 +4,7 @@ import 'slick-carousel';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '/src/component/Home/Product/Details.css';
-import Card_pro from './Card_pro';
+// import Card_pro from './Card_pro';
 import { useParams } from 'react-router-dom';
 import { Sp } from '../../api/SanPhams';
 import axios from 'axios'
@@ -21,7 +21,8 @@ const Details: React.FC  = () => {
             const response = await axios.get<Sp>(
               `https://localhost:7095/api/SanPhams/${maSP}`
             );
-            console.log("DATA1:", response.data); // getSanPhamAPI đã trả về data
+            console.log("DATA1:", response.data); 
+            // getSanPhamAPI đã trả về data
               setSanPhams(response.data); // data đã được xử lý bởi interceptor
               setLoading(false);
           } catch (err) {
@@ -34,7 +35,9 @@ const Details: React.FC  = () => {
   
   
   }, [maSP]);
+  console.log(sansp?.kichThuocs); // Kiểm tra toàn bộ dữ liệu sản phẩm
 
+  
     useEffect(() => {
         const initializeSlick = () => {
             $('.slick3').slick({
@@ -134,40 +137,34 @@ const Details: React.FC  = () => {
                     {/*  */}
                     <div className="p-t-33 select-container">
 <div className="selection-block row">
-<div className="selection-label col-1">Size</div>
+{/* <div className="selection-label col-1" htmlFor={size}>Size</div> */}
+<label htmlFor="size">Kích Thước: </label>
 <div className="col-1"></div>
 <div className="select-wrapper col-10">
-{/* <select className="select-box" name="size">
-    <option className="optionselect">Choose an option</option>
-    <option className="optionselect"> Size S</option>
-    <option className="optionselect"> Size M</option>
-    <option className="optionselect"> Size L</option>
-    <option className="optionselect"> Size XL</option>
+<select className="select-box" name="size" id="size">
+{sansp.kichThuocs?.length > 0 ? (
+                    sansp.kichThuocs.map(kt => (
+                        <option className="optionselect" key={kt.maKT}  value={kt.maKT}> {kt.tenKT}</option>
+                    ))
+                ) : (
+                    <p>Không có kích thước</p>
+                )}
 </select>
 
-</div> */}
-
-{sansp.KichThuocc?.length ? sansp.KichThuocc.map((kt) => (
-                            <button
-                                key={kt.maKichThuoc}
-                                style={{
-                                    backgroundColor: kt?.maKichThuoc=== kt?.maKichThuoc ? 'lightblue' : 'white',
-                                    cursor: 'pointer' }}
-                            >
-                                {kt.tenKichThuoc}
-                            </button>
-                        )) : <span>No sizes available</span>}
 </div>
 <div className="selection-block row">
-<div className="selection-label col-1">Color</div>
+{/* <div className="selection-label col-1">Màu Sắc: </div> */}
+<label htmlFor="color">Màu Sắc: </label>
 <div className="col-1"></div>
 <div className="select-wrapper col-10">
-<select className="select-box" name="color">
-    <option>Choose an option</option>
-    <option>Red</option>
-    <option>Blue</option>
-    <option>White</option>
-    <option>Grey</option>
+<select className="select-box" name="color" id="color">
+{sansp.mauSacs?.length > 0 ? (
+                    sansp.mauSacs.map(kt => (
+                        <option className="optionselect" key={kt.maMS}  value={kt.maMS}> {kt.tenMS}</option>
+                    ))
+                ) : (
+                    <p>Không có kích thước</p>
+                )}
 </select>
 </div>
 </div>
@@ -229,19 +226,21 @@ const Details: React.FC  = () => {
         <span className="stext-107 cl6 p-lr-25">Categories: Jacket, Men</span>
     </div>
 </section>
+  // Kiểm tra dữ liệu màu sắc
+
 )}
             
-            <section className="sec-relate-product bg0 p-t-45 p-b-105">
+            {/* <section className="sec-relate-product bg0 p-t-45 p-b-105">
                 <div className="container">
                     <div className="p-b-45">
                         <h3 className="ltext-106 cl5 txt-center">Related Products</h3>
-                    </div>
+                    </div> */}
                     {/* Slide2 */}
-                    <div className="row isotope-grid">
+                    {/* <div className="row isotope-grid">
             <Card_pro />
           </div>
                 </div>
-            </section>
+            </section> */}
         </>
 
     )

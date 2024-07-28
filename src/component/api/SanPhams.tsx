@@ -27,14 +27,18 @@ export interface Sp {
     maLoai: number;
     maNhanHieu: number;
     hinhAnh: string;
-    KichThuocc : KichThuocs[];
-    MauSacc : MauSacs[]
+    maKT: number;
+    tenKT: string;
+    maMauSac: number;
+    tenMauSac: string;
+    kichThuocs : KichThuocs[];
+    mauSacs : MauSacs[]
 }
 interface KichThuocs {
-    maKichThuoc: number;
-    tenKichThuoc: string
+    maKT: number;
+    tenKT: string
 }
 interface MauSacs {
-    maMauSac: number;
-    tenMauSac: string
+    maMS: number;
+    tenMS: string
 }
