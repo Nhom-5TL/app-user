@@ -27,4 +27,18 @@ export interface Sp {
     maLoai: number;
     maNhanHieu: number;
     hinhAnh: string;
+    maKT: number;
+    tenKT: string;
+    maMS: number;
+    soLuong: number;
+    kichThuocs : KichThuocs[];
+    mauSacs : MauSacs[]
+}
+interface KichThuocs {
+    maKT: number;
+    tenKT: string
+}
+interface MauSacs {
+    maMS: number;
+    tenMS: string
 }

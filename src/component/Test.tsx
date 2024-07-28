@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getSanPhamAPI } from '../api/SanPhams'; // Đảm bảo đường dẫn chính xác
-import { Sp } from '../api/SanPhams'; // Đảm bảo đường dẫn chính xác
+import { getSanPhamAPI } from './api/SanPhams'; // Đảm bảo đường dẫn chính xác
+import { Sp } from './api/SanPhams'; // Đảm bảo đường dẫn chính xác
 
 const Test = () => {
     const [sanPhams, setSanPhams] = useState<Sp[]>([]);

@@ -1,6 +1,35 @@
-import React from "react"
-
+import React ,  { useEffect ,useState}  from "react";
+import { Sp } from '../api/SanPhams';
+import axios from 'axios';
+import { it } from "node:test";
 const Index = () => {
+  const [sansp, setSanPhams] = useState<Sp[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+      const [error, setError] = useState<string | null>(null);
+
+      useEffect(() => {
+        const fetchSanPhams = async () => {
+            try {
+              const response = await axios.get<Sp[]>(
+                `https://localhost:7095/api/GioHangs`
+              );
+              console.log("DATA1:", response.data); 
+              // getSanPhamAPI đã trả về data
+                setSanPhams(response.data); // data đã được xử lý bởi interceptor
+                setLoading(false);
+            } catch (err) {
+                setError('Failed to fetch products');
+                setLoading(false);
+            }
+        };
+    
+        fetchSanPhams();
+    
+    
+    }, []);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
   return (
     <>
       <>
@@ -26,52 +55,36 @@ const Index = () => {
                         <tr className="table_head">
                           <th className="column-1">Sản Phẩm</th>
                           <th className="column-2" />
+                          <th className="column-3">Size</th>
                           <th className="column-3">Giá</th>
                           <th className="column-4">Số Lượng</th>
                           <th className="column-5">Tổng Tiền</th>
                         </tr>
-                        <tr className="table_row">
+                        {sansp.map((item, key) => (
+                          <tr className="table_row" key={key}>
                           <td className="column-1">
                             <div className="how-itemcart1">
                               <img src="src/assets/images/rolex.jpg" alt="IMG" />
                             </div>
                           </td>
-                          <td className="column-2">Moissanite Super Vip 1:1</td>
-                          <td className="column-3">72,500,000 ₫</td>
+                          <td className="column-2">{item.tenSP}</td>
+                          <td className="column-2">{item.tenKT}</td>
+                          <td className="column-3">{item.gia} ₫</td>
                           <td className="column-4">
                             <div className="wrap-num-product flex-w m-l-auto m-r-0">
                               <div className="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                 <i className="fs-16 zmdi zmdi-minus" />
                               </div>
-                              <input className="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" defaultValue={1} />
+                              <input className="mtext-104 cl3 txt-center num-product" type="text" name="num-product1" defaultValue={item.soLuong} />
                               <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                 <i className="fs-16 zmdi zmdi-plus" />
                               </div>
                             </div>
                           </td>
-                          <td className="column-5">72,500,000 ₫</td>
+                          <td className="column-5">{item.gia * item.soLuong} ₫</td>
                         </tr>
-                        <tr className="table_row">
-                          <td className="column-1">
-                            <div className="how-itemcart1">
-                              <img src="src/assets/images/rolex1.jpg" alt="IMG" />
-                            </div>
-                          </td>
-                          <td className="column-2"> Rolex Lady Datejust</td>
-                          <td className="column-3">2,500,000 ₫</td>
-                          <td className="column-4">
-                            <div className="wrap-num-product flex-w m-l-auto m-r-0">
-                              <div className="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                <i className="fs-16 zmdi zmdi-minus" />
-                              </div>
-                              <input className="mtext-104 cl3 txt-center num-product" type="number" name="num-product2" defaultValue={1} />
-                              <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                <i className="fs-16 zmdi zmdi-plus" />
-                              </div>
-                            </div>
-                          </td>
-                          <td className="column-5">2,500,000 ₫</td>
-                        </tr>
+                        ))}
+                        
                       </tbody>
                     </table>
                   </div>
