@@ -1,11 +1,11 @@
-import { useEffect ,useState} from 'react';
+import { useEffect ,useState, FormEvent} from 'react';
 import $ from 'jquery';
 import 'slick-carousel';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '/src/component/Home/Product/Details.css';
 // import Card_pro from './Card_pro';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { Sp } from '../../api/SanPhams';
 import axios from 'axios'
 const Details: React.FC  = () => {
@@ -14,7 +14,7 @@ const Details: React.FC  = () => {
       const [error, setError] = useState<string | null>(null);
       const { maSP } = useParams<{ maSP: string }>();
       const [soLuong, setQuantity] = useState(1);
-    //  const navigate  = useNavigate();
+      const navigate  = useNavigate();
     useEffect(() => {
       const fetchSanPhams = async () => {
           try {
@@ -68,7 +68,34 @@ const Details: React.FC  = () => {
     const handlePlus = () => {
         setQuantity(soLuong + 1);
     };
+    const gioH = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
+        const form = event.currentTarget as HTMLFormElement;
+    
+        const maKT = (form.elements.namedItem("size") as HTMLInputElement).value;
+    const maMS = (form.elements.namedItem("color") as HTMLInputElement).value;
+
+    const SanPhamViewModel = {
+        maSP,soLuong,maKT,maMS
+      };
+      console.log("idsanPham:", SanPhamViewModel); 
+        try {
+        const res = await  axios.post(`https://localhost:7095/api/GioHangs`, SanPhamViewModel);
+        console.log("idsanPham:", maSP); // Check if idsanPham is correctly received
+        console.log("soLuong:", soLuong); 
+        console.log("soLuong:", maKT); 
+        console.log("soLuong:", maMS); 
+          alert('Sản phẩm đã được thêm vào giỏ hàng!');
+          navigate('/card');
+          return res.data;
+          
+        } catch (error) {
+            console.error('Lỗi không xác định:', error);
+            alert('Đã xảy ra lỗi không xác định, vui lòng thử lại sau.');
+          
+        }
+      };
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     return (
@@ -92,6 +119,7 @@ const Details: React.FC  = () => {
 {sansp && (
     <section className="sec-product-detail bg0 p-t-65 p-b-60">
     <div className="container">
+        <form onSubmit={gioH}>
         <div className="row">
             <div className="col-md-5 col-lg-6 p-b-30">
                 <div className="p-l-25 p-r-30 p-lr-0-lg">
@@ -141,7 +169,7 @@ const Details: React.FC  = () => {
 <label htmlFor="size">Kích Thước: </label>
 <div className="col-1"></div>
 <div className="select-wrapper col-10">
-<select className="select-box" name="size" id="size">
+<select className="select-box" name="size" id="size" >
 {sansp.kichThuocs?.length > 0 ? (
                     sansp.kichThuocs.map(kt => (
                         <option className="optionselect" key={kt.maKT}  value={kt.maKT}> {kt.tenKT}</option>
@@ -157,7 +185,7 @@ const Details: React.FC  = () => {
 <label htmlFor="color">Màu Sắc: </label>
 <div className="col-1"></div>
 <div className="select-wrapper col-10">
-<select className="select-box" name="color" id="color">
+<select className="select-box" name="color" id="color" >
 {sansp.mauSacs?.length > 0 ? (
                     sansp.mauSacs.map(kt => (
                         <option className="optionselect" key={kt.maMS}  value={kt.maMS}> {kt.tenMS}</option>
@@ -178,14 +206,15 @@ const Details: React.FC  = () => {
                                     <input
                                         className="mtext-104 cl3 txt-center num-product"
                                         type="text"
-                                        name="num-product"
+                                        name="soLuong"
                                         value={soLuong} readOnly
                                     />
                                     <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"  onClick={handlePlus}>
                                         <i className="fs-16 zmdi zmdi-plus" />
                                     </div>
                                 </div>
-                                <button className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                <button className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"
+                                type="submit">
                                     Add to cart
                                 </button>
                             </div>
@@ -220,6 +249,7 @@ const Details: React.FC  = () => {
             </div>
         </div>
     </div>
+    </form>
     </div>
     <div className="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15">
         <span className="stext-107 cl6 p-lr-25">SKU: JAK-01</span>
