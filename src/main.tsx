@@ -9,7 +9,7 @@ import Card from './component/Card/Index';
 import Test from './component/Test';
 import Details from './component/Home/Product/Details';
 import DangKy from './component/Home/DangKy/DangKy';
-
+import DangNhap from './component/Home/DangKy/DangNhap';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/DangKy",
         element: <DangKy />
+      },
+      {
+        path: "/DangNhap",
+        element: <DangNhap />
       }
     ],
   },

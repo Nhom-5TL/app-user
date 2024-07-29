@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getSanPhamAPI, Sp } from "../../api/SanPhams"; // Đường dẫn tới file api
+import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đường dẫn tới file api
 import Card_pro from "./Product/Card_pro";
 
 const Product = () => {
