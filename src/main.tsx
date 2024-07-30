@@ -4,11 +4,12 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './component/Layout';
 import Home from './component/Home/Index';
-import Shop from './component/Shop/Index';
+// import Shop from './component/Shop/Index';
 import Card from './component/Card/Index';
 import Test from './component/Test';
-import Details from './component/Home/Product/Details'
-
+import Details from './component/Home/Product/Details';
+import DangKy from './component/Home/DangKy/DangKy';
+import DangNhap from './component/Home/DangKy/DangNhap';
 
 const router = createBrowserRouter([
   {
@@ -19,10 +20,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />
       },
-      {
-        path: "/shop",
-        element: <Shop />
-      },
+      // {
+      //   path: "/shop",
+      //   element: <Shop />
+      // },
       {
         path: "/card",
         element: <Card />
@@ -34,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: ":maSP",
         element: <Details />
+      },
+      {
+        path: "/DangKy",
+        element: <DangKy />
+      },
+      {
+        path: "/DangNhap",
+        element: <DangNhap />
       }
     ],
   },
