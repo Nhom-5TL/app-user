@@ -9,8 +9,8 @@ const DangKy = () => {
         const form = event.currentTarget as HTMLFormElement;
     
         const tenKH = (form.elements.namedItem("tenKH") as HTMLInputElement).value;
-        const sDT = (form.elements.namedItem("SDT") as HTMLInputElement).value;
-        const cCCD = (form.elements.namedItem("CCCD") as HTMLInputElement)
+        const sdt = (form.elements.namedItem("SDT") as HTMLInputElement).value;
+        const cccd = (form.elements.namedItem("CCCD") as HTMLInputElement)
           .value;
         const email = (form.elements.namedItem("email") as HTMLInputElement).value;
         const tenDN = (form.elements.namedItem("tenDN") as HTMLInputElement)
@@ -20,8 +20,8 @@ const DangKy = () => {
     
         const SanPhamViewModel = {
             tenKH,
-            sDT,
-            cCCD,
+            sdt,
+            cccd,
             email,
             tenDN,
             matKhau
@@ -29,7 +29,7 @@ const DangKy = () => {
     
         try {
           const response = await axios.post(
-            "https://localhost:7095/api/KhachHangs",
+            "https://localhost:7095/api/KhachHangs/DangKy",
             SanPhamViewModel
           );
           if (response.status === 200) {
