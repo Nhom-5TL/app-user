@@ -8,6 +8,9 @@ import '/src/component/Home/Product/Details.css';
 import { useParams,useNavigate } from 'react-router-dom';
 import { Sp } from '../../api/SanPhams';
 import axios from 'axios'
+
+
+export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/"
 const Details: React.FC  = () => {
     const [sansp, setSanPhams] = useState<Sp | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -127,24 +130,8 @@ const Details: React.FC  = () => {
                         <div className="slick3 gallery-lb">
                             <div className="item-slick3">
                                 <div className="wrap-pic-w pos-relative">
-                                    <img src="src/assets/images/product-detail-01.jpg" alt="IMG-PRODUCT" />
+                                    <img src={`${LinkImg}${sansp.hinhAnh}`} alt="IMG-PRODUCT" />
                                     <a className="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="src/assets/images/product-detail-01.jpg">
-                                        <i className="fa fa-expand" />
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="item-slick3">
-                                <div className="wrap-pic-w pos-relative">
-                                    <img src="src/assets/images/product-detail-02.jpg" alt="IMG-PRODUCT" />
-                                    <a className="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="src/assets/images/product-detail-02.jpg">
-                                        <i className="fa fa-expand" />
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="item-slick3">
-                                <div className="wrap-pic-w pos-relative">
-                                    <img src="src/assets/images/product-detail-03.jpg" alt="IMG-PRODUCT" />
-                                    <a className="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="src/assets/images/product-detail-03.jpg">
                                         <i className="fa fa-expand" />
                                     </a>
                                 </div>

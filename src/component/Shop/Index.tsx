@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Card_pro from "../Home/Product/Card_pro";
-import { getSanPhamAPI, Sp } from "../../api/SanPhams"; // Đảm bảo đường dẫn đúng với file api.ts
+import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đảm bảo đường dẫn đúng với file api.ts
 
 const Index = () => {
   const [showFilter, setShowFilter] = useState(false);
@@ -9,7 +9,7 @@ const Index = () => {
   const [showSearchItem, setShowSearchItem] = useState("none");
   const [products, setProducts] = useState<Sp[]>([]); // State để lưu trữ danh sách sản phẩm
 
-  
+
   useEffect(() => {
     // Gọi API để lấy danh sách sản phẩm khi component được mount
     const fetchProducts = async () => {
@@ -240,9 +240,7 @@ const Index = () => {
             </div>
           </div>
           <div className="row isotope-grid">
-            {products.map((product) => (
-              <Card_pro key={product.maSP} product={product} />
-            ))}
+            <Card_pro />
           </div>
           {/* Load more */}
           <div className="flex-c-m flex-w w-full p-t-45">

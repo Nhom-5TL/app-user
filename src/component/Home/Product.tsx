@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getSanPhamAPI, Sp } from "../../api/SanPhams"; // Đường dẫn tới file api
+import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đường dẫn tới file api
 import Card_pro from "./Product/Card_pro";
 
 const Product = () => {
@@ -239,7 +239,7 @@ const Product = () => {
             </div>
           </div>
           <div className="row isotope-grid">
-            <Card_pro />
+          <Card_pro />  
           </div>
           {/* Load more */}
           <div className="flex-c-m flex-w w-full p-t-45">
