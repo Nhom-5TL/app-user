@@ -26,14 +26,17 @@ export interface Sp {
     trangThai: number;
     maLoai: number;
     maNhanHieu: number;
-    hinhAnh: string;
+    hinhAnh: string; // Đây sẽ là URL đầy đủ
     maKT: number;
     tenKT: string;
     maMS: number;
     soLuong: number;
-    kichThuocs : KichThuocs[];
-    mauSacs : MauSacs[]
+    kichThuocs: KichThuocs[];
+    mauSacs: MauSacs[];
+    hinhAnhURL: string; // Thêm trường này
+    hinhAnhs: { tenHinhAnh: string }[];
 }
+
 interface KichThuocs {
     maKT: number;
     tenKT: string
