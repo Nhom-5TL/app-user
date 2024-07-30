@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import Card_pro from "../Home/Product/Card_pro";
 import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đảm bảo đường dẫn đúng với file api.ts
 
-// const Index = () => {
-//   const [showFilter, setShowFilter] = useState(false);
-//   const [showFilterItem, setShowFilterItem] = useState("none");
-//   const [showSearch, setShowSearch] = useState(false);
-//   const [showSearchItem, setShowSearchItem] = useState("none");
-//   const [products, setProducts] = useState<Sp[]>([]); // State để lưu trữ danh sách sản phẩm
+const Index = () => {
+  const [showFilter, setShowFilter] = useState(false);
+  const [showFilterItem, setShowFilterItem] = useState("none");
+  const [showSearch, setShowSearch] = useState(false);
+  const [showSearchItem, setShowSearchItem] = useState("none");
+  const [products, setProducts] = useState<Sp[]>([]); // State để lưu trữ danh sách sản phẩm
 
 
   useEffect(() => {
@@ -15,31 +15,31 @@ import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đảm bảo đường d
     const fetchProducts = async () => {
       try {
         const data = await getSanPhamAPI();
-        setProducts(data); // Lưu dữ liệu vào state
+        setProducts(data.data); // Lưu dữ liệu vào state
       } catch (error) {
         console.error("Error fetching data", error);
       }
     };
 
-//     fetchProducts();
-//   }, []);
+    fetchProducts();
+  }, []);
 
-//   const handleShowFilter = async () => {
-//     await setShowFilter(!showFilter);
-//     showFilter === false ? setShowFilterItem("block") : setShowFilterItem("none");
+  const handleShowFilter = async () => {
+    await setShowFilter(!showFilter);
+    showFilter === false ? setShowFilterItem("block") : setShowFilterItem("none");
 
-//     if (showSearch === true) {
-//       handleShowSearch();
-//     }
-//   };
+    if (showSearch === true) {
+      handleShowSearch();
+    }
+  };
 
-//   const handleShowSearch = async () => {
-//     await setShowSearch(!showSearch);
-//     showSearch === false ? setShowSearchItem("block") : setShowSearchItem("none");
-//     if (showFilter === true) {
-//       handleShowFilter();
-//     }
-//   };
+  const handleShowSearch = async () => {
+    await setShowSearch(!showSearch);
+    showSearch === false ? setShowSearchItem("block") : setShowSearchItem("none");
+    if (showFilter === true) {
+      handleShowFilter();
+    }
+  };
 
   return (
     <>
@@ -254,4 +254,4 @@ import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đảm bảo đường d
   );
 };
 
-// export default Index;
+export default Index;
