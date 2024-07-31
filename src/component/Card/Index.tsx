@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from 'axios';
 import { Sp } from '../api/SanPhams';
-
+export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 const Index = () => {
   const [sansp, setSanPhams] = useState<Sp[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -46,10 +46,10 @@ const Index = () => {
       <div className="container mt-5">
         <div className="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
           <a href="index.html" className="stext-109 cl8 hov-cl1 trans-04">
-            Home
+            Trang chủ
             <i className="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true" />
           </a>
-          <span className="stext-109 cl4">Shopping Cart</span>
+          <span className="stext-109 cl4">Giỏ hàng</span>
         </div>
       </div>
       <form className="bg0 p-t-75 p-b-85">
