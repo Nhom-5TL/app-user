@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Sp } from '../../api/SanPhams';
 import axios from 'axios';
 
-const Card_pro = () => {
+const SPLQ = () => {
     const [sansp, setSanPhams] = useState<Sp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -43,7 +43,7 @@ const Card_pro = () => {
 
     return (
         <>
-            {sansp.map((item, key) => (
+            {sansp.slice(0, 4).map((item, key) => (
                 <div className="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" key={key}>
                     <div className="block2">
                         <div className="block2-pic hov-img0">
@@ -69,4 +69,4 @@ const Card_pro = () => {
     );
 };
 
-export default Card_pro;
+export default SPLQ;

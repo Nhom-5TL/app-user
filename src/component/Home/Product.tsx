@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đường dẫn tới file api
-import Card_pro from "./Product/Card_pro";
+import SPLQ from "./Product/SPLQ";
 
 const Product = () => {
   const [showFilter, setShowFilter] = useState(false);
@@ -45,7 +45,7 @@ const Product = () => {
       <section className="bg0 p-t-23 p-b-140">
         <div className="container">
           <div className="p-b-10">
-            <h3 className="ltext-103 cl5">Product Overview</h3>
+            <h3 className="ltext-103 cl5">Sản phẩm</h3>
           </div>
           <div className="flex-w flex-sb-m p-b-52">
             <div className="flex-w flex-l-m filter-tope-group m-tb-10">
@@ -239,7 +239,7 @@ const Product = () => {
             </div>
           </div>
           <div className="row isotope-grid">
-          <Card_pro />  
+          <SPLQ />  
           </div>
           {/* Load more */}
           <div className="flex-c-m flex-w w-full p-t-45">

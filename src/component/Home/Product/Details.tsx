@@ -98,14 +98,12 @@ const Details: React.FC = () => {
             <div className="container" style={{ marginTop: '80px' }}>
                 <div className="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
                     <a href="index.html" className="stext-109 cl8 hov-cl1 trans-04">
-                        Home
+                        Trang chủ
                         <i className="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true" />
                     </a>
-                    <a href="product.html" className="stext-109 cl8 hov-cl1 trans-04">
-                        Men
-                        <i className="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true" />
-                    </a>
-                    <span className="stext-109 cl4">Lightweight Jacket</span>
+                    {sansp && (
+                    <span className="stext-109 cl4">{sansp.tenSP}</span>
+                    )}
                 </div>
             </div>
 
@@ -201,7 +199,7 @@ const Details: React.FC = () => {
                                 </ul>
                                 <div className="tab-content" style={{ width: "1200px", margin: "0 auto" }}>
                                     <p className="stext-102 cl6 description-container">
-                                        Aenean sit amet gravida nisi. Nam fermentum est felis, quis feugiat nunc fringilla sit amet. Ut in blandit ipsum. Quisque luctus dui at ante aliquet, in hendrerit lectus interdum. Morbi elementum sapien rhoncus pretium maximus. Nulla lectus enim, cursus et elementum sed, sodales vitae eros. Ut ex quam, porta consequat interdum in, faucibus eu velit. Quisque rhoncus ex ac libero varius molestie. Aenean tempor sit amet orci nec iaculis. Cras sit amet nulla libero. Curabitur dignissim, nunc nec laoreet consequat, purus nunc porta lacus, vel efficitur tellus augue in ipsum. Cras in arcu sed metus rutrum iaculis. Nulla non tempor erat. Duis in egestas nunc.
+                                    {sansp.moTa}
                                     </p>
                                 </div>
                             </div>
@@ -215,7 +213,9 @@ const Details: React.FC = () => {
                     <div className="p-b-45">
                         <h3 className="ltext-106 cl5 txt-center">Sản phẩm liên quan</h3>
                     </div>
-                    <Card_pro />
+                    <div className="row isotope-grid">
+            <Card_pro />
+          </div>
                     <div className="row isotope-grid"></div>
                 </div>
             </section>
