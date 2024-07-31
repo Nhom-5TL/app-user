@@ -20,13 +20,18 @@ const DangNhap: React.FC = () => {
             mauKhau: password
         };
         try {
-            const response = await axios.post('https://localhost:7095/api/KhachHangs/DangNhap', 
-                loginData
-            );
+          const response = await axios.post('https://localhost:7095/api/KhachHangs/DangNhap', loginData);
+        console.log('Phản hồi từ API:', response.data);
+        const customerId = response.data?.maKH; // Sửa đổi từ MaKH thành maKH
+        if (customerId) {
+            localStorage.setItem('customerId', customerId.toString()); // Đảm bảo customerId là chuỗi
+            console.log('Customer ID đã được lưu vào localStorage:', customerId);
+        } else {
+            console.log('Không có maKH trong phản hồi từ API');
+        }
             alert('Đăng Nhập Thành Công!');
             navigate('/');
-return response.data;
-        }  catch (err) {
+        } catch (err) {
             if (axios.isAxiosError(err)) {
                 const errorMsg = err.response?.data?.Error || 'Đăng nhập thất bại. Vui lòng thử lại.';
                 setError(errorMsg);
@@ -38,46 +43,46 @@ return response.data;
 
     return (
         <>
-         <section className="bg0 p-t-104 p-b-116">
-  <div className="container">
-    <div className="flex-w flex-tr">
-      <div className="container size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-        <form onSubmit={handleLogin}>
-        {error && <p className="error">{error}</p>}
-          <h4 className="mtext-105 cl2 txt-center p-b-30">Đăng Nhập</h4>
-          <label>Tên Đăng Nhập: </label>
-          <div className="bor8 m-b-20 how-pos4-parent">
-            <input
-              className="cl2 plh3 size-116 p-l-20"
-              type="text"
-              name="tenDN"
-              value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-              placeholder="Tên Đăng Nhập"
-            />
-          </div>
-          <label>Mật Khẩu: </label>
-          <div className="bor8 m-b-20 how-pos4-parent">
-            <input
-              className="cl2 plh3 size-116 p-l-20"
-              type="text"
-              name="matKhau"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Mật Khẩu"
-            />
-          </div>
-          <button className="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
-          Login
-          </button>
-          <a href='/DangKy'>Đăng Ký</a>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
+            <section className="bg0 p-t-104 p-b-116">
+                <div className="container">
+                    <div className="flex-w flex-tr">
+                        <div className="container size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+                            <form onSubmit={handleLogin}>
+                                {error && <p className="error">{error}</p>}
+                                <h4 className="mtext-105 cl2 txt-center p-b-30">Đăng Nhập</h4>
+                                <label>Tên Đăng Nhập: </label>
+                                <div className="bor8 m-b-20 how-pos4-parent">
+                                    <input
+                                        className="cl2 plh3 size-116 p-l-20"
+                                        type="text"
+                                        name="tenDN"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                        placeholder="Tên Đăng Nhập"
+                                    />
+                                </div>
+                                <label>Mật Khẩu: </label>
+                                <div className="bor8 m-b-20 how-pos4-parent">
+                                    <input
+                                        className="cl2 plh3 size-116 p-l-20"
+                                        type="password"
+                                        name="matKhau"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        placeholder="Mật Khẩu"
+                                    />
+                                </div>
+                                <button className="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
+                                    Login
+                                </button>
+                                <a href='/DangKy'>Đăng Ký</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </>
     );
 };

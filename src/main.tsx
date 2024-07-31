@@ -10,6 +10,7 @@ import Test from './component/Test';
 import Details from './component/Home/Product/Details';
 import DangKy from './component/Home/DangKy/DangKy';
 import DangNhap from './component/Home/DangKy/DangNhap';
+import PaymentForm from './component/Card/PaymentForm';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/DangNhap",
         element: <DangNhap />
+      },
+      {
+        path:"/PaymentForm",
+        element:<PaymentForm/>
       }
     ],
   },
