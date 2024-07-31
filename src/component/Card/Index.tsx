@@ -2,6 +2,8 @@ import React ,  { useEffect ,useState}  from "react";
 import { Sp } from '../api/SanPhams';
 import axios from 'axios';
 import { it } from "node:test";
+
+export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 const Index = () => {
   const [sansp, setSanPhams] = useState<Sp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -64,7 +66,7 @@ const Index = () => {
                           <tr className="table_row" key={key}>
                           <td className="column-1">
                             <div className="how-itemcart1">
-                              <img src="src/assets/images/rolex.jpg" alt="IMG" />
+                              <img src={LinkImg + item.hinhAnh}  alt="IMG" />
                             </div>
                           </td>
                           <td className="column-2">{item.tenSP}</td>
