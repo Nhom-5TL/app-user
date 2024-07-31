@@ -7,7 +7,7 @@ import '/src/component/Home/Product/Details.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Sp } from '../../api/SanPhams';
 import axios from 'axios';
-import Card_pro from "../../Home/Product/Card_pro";
+import SPLQ from "../../Home/Product/SPLQ";
 
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 
@@ -193,7 +193,7 @@ const Details: React.FC = () => {
                                 <ul className="nav nav-tabs" role="tablist">
                                     <li className="nav-item p-b-10">
                                         <a className="nav-link active" data-toggle="tab" href="#description" role="tab">
-                                            Description
+                                            Mô tả
                                         </a>
                                     </li>
                                 </ul>
@@ -214,7 +214,7 @@ const Details: React.FC = () => {
                         <h3 className="ltext-106 cl5 txt-center">Sản phẩm liên quan</h3>
                     </div>
                     <div className="row isotope-grid">
-            <Card_pro />
+            <SPLQ />
           </div>
                     <div className="row isotope-grid"></div>
                 </div>

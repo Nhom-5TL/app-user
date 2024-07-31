@@ -8,7 +8,8 @@
 .slick3 .slick-slide {
     display: flex;
     justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    align-items: center;
+    margin-left: 10px; /* Center vertically */
 }
 
 .wrap-pic-w {

@@ -12,10 +12,7 @@ const SPLQ = () => {
     useEffect(() => {
         const fetchSanPhams = async () => {
             try {
-                const response = await axios.get<Sp[]>(
-                    "https://localhost:7095/api/SanPhams"
-                );
-                console.log("DATA:", response.data);
+                const response = await axios.get<Sp[]>("https://localhost:7095/api/SanPhams");
                 setSanPhams(response.data);
                 setLoading(false);
             } catch (err) {
@@ -27,15 +24,8 @@ const SPLQ = () => {
         fetchSanPhams();
     }, []);
 
-    const CtWeb = async (maSP: number) => {
-        try {
-            const response = await axios.get<Sp[]>(`https://localhost:7095/api/SanPhams/${maSP}`);
-            console.log('Response data:', response.data);
-            setSanPhams(response.data);
-            navigate(`/${maSP}`);
-        } catch (error) {
-            console.error('Error in CtWeb:', error);
-        }
+    const handleViewDetails = (maSP: number) => {
+        navigate(`/${maSP}`);
     };
 
     if (loading) return <div>Loading...</div>;
@@ -43,23 +33,24 @@ const SPLQ = () => {
 
     return (
         <>
-            {sansp.slice(0, 4).map((item, key) => (
-                <div className="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" key={key}>
+            {sansp.slice(0, 4).map((item) => (
+                <div className="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" key={item.maSP}>
                     <div className="block2">
                         <div className="block2-pic hov-img0">
                             <img src={item.hinhAnhURL} alt="IMG-PRODUCT" />
-                            <a onClick={() => CtWeb(item.maSP)} className="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                            <a 
+                                onClick={() => handleViewDetails(item.maSP)} 
+                                className="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
+                            >
                                 Chi tiết sản phẩm
                             </a>
                         </div>
                         <div className="block2-txt flex-w flex-t p-t-14">
-                            <div className="block2-txt-child1 flex-col-l ">
+                            <div className="block2-txt-child1 flex-col-l">
                                 <a href="product-detail.html" className="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                     {item.tenSP}
                                 </a>
                                 <span className="stext-105 cl3">{item.gia} VND</span>
-                            </div>
-                            <div className="block2-txt-child2 flex-r p-t-3">
                             </div>
                         </div>
                     </div>
