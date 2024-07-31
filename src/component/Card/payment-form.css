@@ -1,0 +1,75 @@
+.payment-form {
+    max-width: 800px;
+    margin: 80px auto 20px; /* Added top margin to push the form below the header */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.payment-form label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.payment-form input[type="text"], 
+.payment-form textarea, 
+.payment-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.payment-form textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.payment-form button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.payment-form button:hover {
+    background-color: #0056b3;
+}
+
+.cart-details {
+    margin-top: 20px;
+}
+
+.cart-details h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.cart-details table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart-details th, 
+.cart-details td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.cart-details th {
+    background-color: #f2f2f2;
+}
+
+.cart-details tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
