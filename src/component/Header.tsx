@@ -87,9 +87,10 @@ const Header = () => {
                 <a href="#" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify={0}>
                   <i className="zmdi zmdi-favorite-outline" />
                 </a>
-                <a href="/dangnhap" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 " >
-                  Đăng Nhập
-                </a>
+                <a href="/dangnhap" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 login-text">
+  Đăng Nhập
+</a>
+
               </div>
             </nav>
           </div>

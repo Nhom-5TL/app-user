@@ -30,3 +30,6 @@
   #search-results {
     margin: 20px;
   }
+  .login-text {
+    font-size: 1.1em; /* Adjust the font size as needed */
+  }
