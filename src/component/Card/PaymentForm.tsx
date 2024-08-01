@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './payment-form.css';
 
-interface CartItem {
-    MaSP: number;
+
+interface chiTietDonHangs {
+    maSP: number;
     tenSP: string;
     tenKT: string;
+    tenMS: string;
+    maMS: number;
+    maKT: number;
     gia: number;
     soLuong: number;
 }
@@ -18,13 +22,15 @@ const PaymentForm: React.FC = () => {
     const [phone, setPhone] = useState<string>('');
     const [note, setNote] = useState<string>('');
     const [paymentMethod, setPaymentMethod] = useState<string>('COD');
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [cartItems, setCartItems] = useState<chiTietDonHangs[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [customerId, setCustomerId] = useState<string | null>(null);
-
+    const na = useNavigate();
+// const {maSP} = useParams<{ maSP: string }>();
     useEffect(() => {
-        const data = location.state as { cartItems: CartItem[] };
+        
+        const data = location.state as { cartItems: chiTietDonHangs[] };
         if (data && data.cartItems) {
             setCartItems(data.cartItems);
         } else {
@@ -52,35 +58,59 @@ const PaymentForm: React.FC = () => {
         }
     
         // Kiểm tra giá trị MaSP trong giỏ hàng
-        const invalidItems = cartItems.filter(item => !item.MaSP || item.MaSP === undefined);
-    
-        if (invalidItems.length > 0) {
-            setError('Một số sản phẩm có ID không hợp lệ hoặc bị thiếu.');
-            return;
+        // const invalidItems = cartItems.filter(item => !item.MaSP || item.MaSP === undefined);
+        console.log( name,
+            address,
+            phone,
+           note,
+          paymentMethod,
+          customerId,
+            cartItems.map(item => ({
+                MaSP: item.maSP,
+               MaMauSac: item.tenMS,
+               MaKichThuoc: item.tenKT,
+               SoLuong: item.soLuong,
+               DonGia: item.gia,
+               TenSP: item.tenSP
+
+           })),
+           )
+        // if (invalidItems.length > 0) {
+        //     setError('Một số sản phẩm có ID không hợp lệ hoặc bị thiếu.');
+        //     return;
+        // }
+        const DonHang = {
+            tenKh: name,
+                diaChi: address,
+                sdt: phone,
+                ghiChu: note,
+                trangThaiThanhToan: paymentMethod,
+                maKH: customerId,
+                chiTietDonHangs: cartItems.map(item => ({
+                    maSP: item.maSP,
+                    tenMS: item.tenMS,
+                    tenKT: item.tenKT,
+                    soLuong: item.soLuong,
+                    donGia: item.gia,
+                    tenSP: item.tenSP
+                })),
+                
         }
     
         try {
-            const response = await axios.post('https://localhost:7095/api/DonHang/CreateOrder', {
-                TenKh: name,
-                DiaChi: address,
-                SDT: phone,
-                GhiChu: note,
-                TrangThaiThanhToan: paymentMethod,
-                ChiTietDonHangs: cartItems.map(item => ({
-                    MaSP: item.MaSP,
-                    MaMauSac: null,
-                    MaKichThuoc: null,
-                    SoLuong: item.soLuong,
-                    DonGia: item.gia,
-                    TenSP: item.tenSP
-                })),
-                MaKH: customerId
-            });
+            const response = await axios.post('https://localhost:7095/api/DonHang/CreateOrder', DonHang);
+            alert('Thanh toán thành công!')
             setSuccess('Đơn hàng đã được tạo thành công.');
             setError(null);
+            na('/')
             console.log('Order created:', response.data);
+            return response.data;
         } catch (error) {
-            setError('Không thể tạo đơn hàng. Vui lòng thử lại.');
+            if (axios.isAxiosError(error)) {
+                setError(`Lỗi: ${error.message}`);
+            } else {
+                setError('Không thể tạo đơn hàng. Vui lòng thử lại.');
+            }
             setSuccess(null);
             console.error('Error creating order:', error);
         }
@@ -119,16 +149,18 @@ const PaymentForm: React.FC = () => {
                             <tr>
                                 <th>Sản phẩm</th>
                                 <th>Size</th>
+                                <th>Color</th>
                                 <th>Giá</th>
                                 <th>Số lượng</th>
                                 <th>Tổng tiền</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {cartItems.map((item, index) => (
-                                <tr key={index}>
+                            {cartItems.map((item) => (
+                                <tr key={item.maSP}>
                                     <td>{item.tenSP}</td>
                                     <td>{item.tenKT}</td>
+                                    <td >{item.tenMS}</td>
                                     <td>{item.gia} ₫</td>
                                     <td>{item.soLuong}</td>
                                     <td>{item.gia * item.soLuong} ₫</td>

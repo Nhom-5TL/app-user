@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../Card/AuthContext';
 
 interface LoginVM {
     tenDN: string;
@@ -12,6 +13,7 @@ const DangNhap: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const navigate  = useNavigate();
+    const { setIsLoggedIn } = useAuth();
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -19,18 +21,29 @@ const DangNhap: React.FC = () => {
             tenDN: username,
             mauKhau: password
         };
+        const returnUrl = new URLSearchParams(window.location.search).get('ReturnUrl') || '/';
+    
         try {
-          const response = await axios.post('https://localhost:7095/api/KhachHangs/DangNhap', loginData);
-        console.log('Phản hồi từ API:', response.data);
+            const response = await axios.post('https://localhost:7095/api/KhachHangs/DangNhap', loginData);
+          if (response.data.success) {
+            navigate(returnUrl); // Điều hướng đến ReturnUrl sau khi đăng nhập thành công
+          }
+        //   const response = await axios.post('https://localhost:7095/api/KhachHangs/DangNhap', loginData);
+          localStorage.setItem('token', response.data.token); // Lưu token
+        setIsLoggedIn(true);
+
         const customerId = response.data?.maKH; // Sửa đổi từ MaKH thành maKH
         if (customerId) {
             localStorage.setItem('customerId', customerId.toString()); // Đảm bảo customerId là chuỗi
-            console.log('Customer ID đã được lưu vào localStorage:', customerId);
         } else {
             console.log('Không có maKH trong phản hồi từ API');
         }
-            alert('Đăng Nhập Thành Công!');
-            navigate('/');
+
+        // Kiểm tra xem có URL redirect không
+        const redirectPath = localStorage.getItem('redirectAfterLogin') || '/';
+        localStorage.removeItem('redirectAfterLogin'); // Xóa URL sau khi điều hướng
+        alert('Đăng Nhập Thành Công!');
+        navigate(redirectPath);
         } catch (err) {
             if (axios.isAxiosError(err) && err.response && err.response.data) {
                 const errorMessage = err.response.data.error || 'Đăng ký thất bại. Vui lòng thử lại.';
