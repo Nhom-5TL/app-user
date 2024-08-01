@@ -32,12 +32,13 @@ const DangNhap: React.FC = () => {
             alert('Đăng Nhập Thành Công!');
             navigate('/');
         } catch (err) {
-            if (axios.isAxiosError(err)) {
-                const errorMsg = err.response?.data?.Error || 'Đăng nhập thất bại. Vui lòng thử lại.';
-                setError(errorMsg);
-            } else {
-                setError('Đăng nhập thất bại. Vui lòng thử lại.');
-            }
+            if (axios.isAxiosError(err) && err.response && err.response.data) {
+                const errorMessage = err.response.data.error || 'Đăng ký thất bại. Vui lòng thử lại.';
+                console.log('Lỗi từ API:', err.response.data); // Ghi lại lỗi để kiểm tra
+                setError(errorMessage);
+              } else {
+                setError('Đăng ký thất bại. Vui lòng thử lại.');
+              }
         }
     };
 
@@ -48,8 +49,9 @@ const DangNhap: React.FC = () => {
                     <div className="flex-w flex-tr">
                         <div className="container size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
                             <form onSubmit={handleLogin}>
-                                {error && <p className="error">{error}</p>}
+                                
                                 <h4 className="mtext-105 cl2 txt-center p-b-30">Đăng Nhập</h4>
+                                {error && <h3 className="error">{error}</h3>}
                                 <label>Tên Đăng Nhập: </label>
                                 <div className="bor8 m-b-20 how-pos4-parent">
                                     <input

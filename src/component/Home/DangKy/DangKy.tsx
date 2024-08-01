@@ -1,8 +1,11 @@
 import { useState, FormEvent} from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 const DangKy = () => {
 
-    const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string[] }>({});
+    const navigate  = useNavigate();
     const AddSP = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
     
@@ -32,13 +35,29 @@ const DangKy = () => {
             "https://localhost:7095/api/KhachHangs/DangKy",
             SanPhamViewModel
           );
+          navigate('/DangNhap');
           if (response.status === 200) {
             console.log(`Sản phẩm đã được thêm: ${response.data}`);
+            alert("Đăng ký thành công!");
             return response.data;
           }
-        } catch (error) {
-          setMessage(`Lỗi: ${message}`);
+        }catch (err) {
+          if (axios.isAxiosError(err) && err.response && err.response.data) {
+            const { errors } = err.response.data;
+    
+            if (errors) {
+              // Cập nhật các lỗi cho từng trường
+              setFormErrors(errors);
+              // Nếu cần, bạn có thể kết hợp các lỗi thành một thông báo chung
+              setError('Đăng ký thất bại. Vui lòng kiểm tra các lỗi bên dưới.');
+            } else {
+              setError('Đăng ký thất bại. Vui lòng thử lại.');
+            }
+          } else {
+            setError('Đăng ký thất bại. Vui lòng thử lại.');
+          }
         }
+      
       };
     return(
         <>
@@ -46,8 +65,10 @@ const DangKy = () => {
   <div className="container">
     <div className="flex-w flex-tr">
       <div className="container size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+     
         <form onSubmit={AddSP}>
           <h4 className="mtext-105 cl2 txt-center p-b-30">Đăng Ký</h4>
+          {error && <p className="error">{error}</p>}
           <label>Họ Và Tên: </label>
           <div className="bor8 m-b-20 how-pos4-parent">
             <input
@@ -57,6 +78,9 @@ const DangKy = () => {
               placeholder="Họ Và Tên"
             />
           </div>
+          {formErrors.tenKH && (
+                  <p className="error">{formErrors.tenKH.join(', ')}</p>
+                )}
           <label>Số Điện Thoại: </label>
           <div className="bor8 m-b-20 how-pos4-parent">
             <input
@@ -66,6 +90,9 @@ const DangKy = () => {
               placeholder="Số Điện Thoại"
             />
           </div>
+          {formErrors.SDT && (
+                  <p className="error">{formErrors.SDT.join(', ')}</p>
+                )}
           <label>CCCD: </label>
           <div className="bor8 m-b-20 how-pos4-parent">
             <input
@@ -75,6 +102,9 @@ const DangKy = () => {
               placeholder="CCCD"
             />
           </div>
+          {formErrors.CCCD && (
+                  <p className="error">{formErrors.CCCD.join(', ')}</p>
+                )}
           <label>Email: </label>
           <div className="bor8 m-b-20 how-pos4-parent">
             <input
@@ -84,6 +114,9 @@ const DangKy = () => {
               placeholder="Email"
             />
           </div>
+          {formErrors.email && (
+                  <p className="error">{formErrors.email.join(', ')}</p>
+                )}
           <label>Tên Đăng Nhập: </label>
           <div className="bor8 m-b-20 how-pos4-parent">
             <input
@@ -93,6 +126,9 @@ const DangKy = () => {
               placeholder="Tên Đăng Nhập"
             />
           </div>
+          {formErrors.tenDN && (
+                  <p className="error">{formErrors.tenDN.join(', ')}</p>
+                )}
           <label>Mật Khẩu: </label>
           <div className="bor8 m-b-20 how-pos4-parent">
             <input
@@ -102,6 +138,9 @@ const DangKy = () => {
               placeholder="Mật Khẩu"
             />
           </div>
+          {formErrors.MatKhau && (
+                  <p className="error">{formErrors.MatKhau.join(', ')}</p>
+                )}
           <button className="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
             Submit
           </button>
