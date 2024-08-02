@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from 'axios';
 import { Sp } from '../api/SanPhams';
+  import { useAuth } from './AuthContext';
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 const Index = () => {
   const [sansp, setSanPhams] = useState<Sp[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate(); // Khai báo useNavigate
-
+  const { isLoggedIn } = useAuth();
   useEffect(() => {
     const fetchSanPhams = async () => {
       try {
@@ -27,6 +28,10 @@ const Index = () => {
   }, []);
 
   const handlePurchase = () => {
+    if (!isLoggedIn) {
+      navigate('/DangNhap');
+  }
+
     console.log('SanPham Data:', sansp);
     const invalidItems = sansp.filter(item => !item.maSP || item.maSP === undefined);
 

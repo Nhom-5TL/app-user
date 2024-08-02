@@ -1,6 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './component/Layout';
 import Home from './component/Home/Index';
@@ -11,6 +10,8 @@ import Details from './component/Home/Product/Details';
 import DangKy from './component/Home/DangKy/DangKy';
 import DangNhap from './component/Home/DangKy/DangNhap';
 import PaymentForm from './component/Card/PaymentForm';
+import { AuthProvider } from './component/Card/AuthContext';
+import PrivateRoute from './component/Home/DangKy/PrivateRoute'; // Điều chỉnh đường dẫn nếu cần
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       {
         path: "/card",
         element: <Card />
+        
       },
       {
         path: "test",
@@ -46,8 +48,12 @@ const router = createBrowserRouter([
         element: <DangNhap />
       },
       {
-        path:"/PaymentForm",
-        element:<PaymentForm/>
+        path: "/PaymentForm",
+        element: (
+          <PrivateRoute>
+            <PaymentForm />
+          </PrivateRoute>
+        )
       }
     ],
   },
@@ -55,6 +61,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>,
-)
+);
