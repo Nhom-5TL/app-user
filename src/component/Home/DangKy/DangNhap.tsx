@@ -37,7 +37,7 @@ const DangNhap: React.FC = () => {
                 console.log('Lỗi từ API:', err.response.data); // Ghi lại lỗi để kiểm tra
                 setError(errorMessage);
               } else {
-                setError('Đăng ký thất bại. Vui lòng thử lại.');
+                setError('Đăng nhập thất bại. Vui lòng thử lại.');
               }
         }
     };
