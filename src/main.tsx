@@ -12,6 +12,8 @@ import DangNhap from './component/Home/DangKy/DangNhap';
 import PaymentForm from './component/Card/PaymentForm';
 import { AuthProvider } from './component/Card/AuthContext';
 import PrivateRoute from './component/Home/DangKy/PrivateRoute'; // Điều chỉnh đường dẫn nếu cần
+import { ToastContainer } from 'react-toastify'; // Import ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS
 
 const router = createBrowserRouter([
   {
@@ -29,7 +31,6 @@ const router = createBrowserRouter([
       {
         path: "/card",
         element: <Card />
-        
       },
       {
         path: "test",
@@ -63,6 +64,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>
       <RouterProvider router={router} />
+      <ToastContainer /> {/* Thêm ToastContainer vào đây */}
     </AuthProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
