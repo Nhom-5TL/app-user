@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sp } from '../../api/SanPhams';
 import axios from 'axios';
+
+interface Sp {
+    maSP: number;
+    tenSP: string;
+    gia: number;
+    hinhAnhURL: string;
+}
 
 const Card_pro = () => {
     const [sansp, setSanPhams] = useState<Sp[]>([]);
@@ -41,6 +47,18 @@ const Card_pro = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
+    // Tạo formatter cho tiền tệ VND
+    const currencyFormatter = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    });
+
+    // Hàm thay thế ký hiệu ₫ bằng "VND"
+    const formatPrice = (price: number) => {
+        const formatted = currencyFormatter.format(price);
+        return formatted.replace('₫', 'VND');
+    };
+
     return (
         <>
             {sansp.map((item, key) => (
@@ -57,7 +75,7 @@ const Card_pro = () => {
                                 <a href="product-detail.html" className="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                     {item.tenSP}
                                 </a>
-                                <span className="stext-105 cl3">{item.gia} VND</span>
+                                <span className="stext-105 cl3">{formatPrice(item.gia)}</span>
                             </div>
                             <div className="block2-txt-child2 flex-r p-t-3">
                             </div>

@@ -86,6 +86,17 @@ const Details: React.FC = () => {
         }
     };
 
+    const currencyFormatter = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    });
+  
+    // Hàm thay thế ký hiệu ₫ bằng "VND"
+    const formatPrice = (price: number) => {
+        const formatted = currencyFormatter.format(price);
+        return formatted.replace('₫', 'VND');
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
@@ -126,7 +137,7 @@ const Details: React.FC = () => {
                                         <h4 className="mtext-105 cl2 js-name-detail p-b-14">
                                             {sansp.tenSP}
                                         </h4>
-                                        <span className="mtext-106 cl2">{sansp.gia} VND</span>
+                                        <span className="mtext-106 cl2">{formatPrice(sansp.gia)} VND</span>
                                         <p className="stext-102 cl3 p-t-23">
                                             {sansp.moTa}
                                         </p>
