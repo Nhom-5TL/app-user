@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import "./header.css";
-import { useCart } from './api/CartContext';
-
 
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 
@@ -13,8 +11,7 @@ interface CartItem {
   soLuong: number;
 }
 
-const Header:React.FC = () => {
-  const { cartCount } = useCart();
+const Header = () => {
   const [showCard, setShowCard] = useState(false);
   const [showHeaderCart, setShowHeaderCart] = useState("");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -93,7 +90,7 @@ const Header:React.FC = () => {
                 <div>
                   <div id="search-results"></div>
                 </div>
-                <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" onClick={handleShowCard} data-notify={cartCount}>
+                <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" onClick={handleShowCard} data-notify={cartItems.length}>
                   <i className="zmdi zmdi-shopping-cart" />
                 </div>
                 <a href="/dangnhap" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 login-text">Đăng Nhập</a>

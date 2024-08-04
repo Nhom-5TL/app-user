@@ -9,7 +9,6 @@ import { Sp } from '../../api/SanPhams';
 import axios from 'axios';
 import SPLQ from "../../Home/Product/SPLQ";
 import { toast } from 'react-toastify';
-import { useCart } from '../../api/CartContext'; // Đảm bảo đường dẫn đúng
 
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 
@@ -19,7 +18,6 @@ const Details: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const { maSP } = useParams<{ maSP: string }>();
     const [soLuong, setQuantity] = useState(1);
-    const { addToCart } = useCart();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -80,18 +78,12 @@ const Details: React.FC = () => {
 
         try {
             const res = await axios.post(`https://localhost:7095/api/GioHangs`, SanPhamViewModel);
-            toast.success("Đã thêm vào giỏ hàng thành công");
-            
-            // Cập nhật giỏ hàng
-            addToCart(soLuong);
-
-            // Điều hướng tới trang giỏ hàng (nếu cần)
+            toast.success("Đã thêm vào giỏ hàng thành công")
             // navigate('/card');
-
             return res.data;
         } catch (error) {
             console.error('Lỗi không xác định:', error);
-            toast.error("Thêm vào giỏ hàng thất bại");
+            toast.success("Thêm vào giỏ hàng thất bại")
         }
     };
 
