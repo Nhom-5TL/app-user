@@ -88,20 +88,11 @@ const Header = () => {
               {/* Icon header */}
               <div className="wrap-icon-header flex-w flex-r-m">
                 <div>
-                  <div className="search-container">
-                    <input type="text" id="search-input" placeholder="Tìm kiếm..." />
-                    <button id="search-button">
-                      <i className="fa fa-search"></i>
-                    </button>
-                  </div>
                   <div id="search-results"></div>
                 </div>
                 <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" onClick={handleShowCard} data-notify={cartItems.length}>
                   <i className="zmdi zmdi-shopping-cart" />
                 </div>
-                <a href="#" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify={0}>
-                  <i className="zmdi zmdi-favorite-outline" />
-                </a>
                 <a href="/dangnhap" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 login-text">Đăng Nhập</a>
               </div>
             </nav>

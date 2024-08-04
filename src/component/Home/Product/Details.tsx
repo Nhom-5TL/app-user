@@ -137,7 +137,7 @@ const Details: React.FC = () => {
                                         <h4 className="mtext-105 cl2 js-name-detail p-b-14">
                                             {sansp.tenSP}
                                         </h4>
-                                        <span className="mtext-106 cl2">{formatPrice(sansp.gia)} VND</span>
+                                        <span className="mtext-106 cl2">{formatPrice(sansp.gia)}</span>
                                         <p className="stext-102 cl3 p-t-23">
                                             {sansp.moTa}
                                         </p>
