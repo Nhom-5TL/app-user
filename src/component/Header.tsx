@@ -123,7 +123,7 @@ const Header = () => {
               {/* Icon header */}
               <div className="wrap-icon-header flex-w flex-r-m">
 
-                <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" onClick={handleShowCard} data-notify={cartItems.length}>
+                <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" onClick={handleShowCard}>
                   <i className="zmdi zmdi-shopping-cart" />
                 </div>
                 <div className="btn-group col-lg-4 col-6 text-right">
@@ -168,12 +168,12 @@ const Header = () => {
               <i className="zmdi zmdi-search" />
             </div>
             <div className="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" onClick={handleShowCard} data-notify={cartItems.length}>
-              <i className="zmdi zmdi-shopping-cart" />
+              <i className="zmdi zmdi-shopping-cart" /> 
             </div>
             <a href="#" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti" data-notify={0}>
               <i className="zmdi zmdi-favorite-outline" />
             </a>
-          </div>
+          </div> 
           {/* Button show menu */}
           <div className="btn-show-menu-mobile hamburger hamburger--squeeze">
             <span className="hamburger-box">

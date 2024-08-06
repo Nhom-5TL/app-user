@@ -489,7 +489,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 
 
 /*---------------------------------------------*/
-.icon-header-noti::after {
+/* .icon-header-noti::after {
   content: attr(data-notify);
   font-family: 'Roboto', sans-serif;
   font-size: 12px;
@@ -505,7 +505,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   height: 15px;
   padding: 0 3px;
   background-color: #717fe0;
-}
+} */
 
 /*---------------------------------------------*/
 .wrap-header-mobile .wrap-icon-header {
