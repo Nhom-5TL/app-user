@@ -25,7 +25,7 @@ const PaymentForm: React.FC = () => {
     const [cartItems, setCartItems] = useState<chiTietDonHangs[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
-    const [customerId, setCustomerId] = useState<string | null>(null);
+    const [maKH, setCustomerId] = useState<string | null>(null);
     const na = useNavigate();
 // const {maSP} = useParams<{ maSP: string }>();
     useEffect(() => {
@@ -38,7 +38,7 @@ const PaymentForm: React.FC = () => {
         }
 
         const fetchCustomerId = () => {
-            const id = localStorage.getItem('customerId');
+            const id = localStorage.getItem('maKH');
             if (id) {
                 setCustomerId(id);
             } else {
@@ -52,7 +52,7 @@ const PaymentForm: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
     
-        if (!customerId) {
+        if (!maKH) {
             setError('ID khách hàng không có sẵn. Vui lòng đăng nhập lại.');
             return;
         }
@@ -64,7 +64,7 @@ const PaymentForm: React.FC = () => {
             phone,
            note,
           paymentMethod,
-          customerId,
+          maKH,
             cartItems.map(item => ({
                 MaSP: item.maSP,
                MaMauSac: item.tenMS,
@@ -85,7 +85,7 @@ const PaymentForm: React.FC = () => {
                 sdt: phone,
                 ghiChu: note,
                 trangThaiThanhToan: paymentMethod,
-                maKH: customerId,
+                maKH: maKH,
                 chiTietDonHangs: cartItems.map(item => ({
                     maSP: item.maSP,
                     tenMS: item.tenMS,

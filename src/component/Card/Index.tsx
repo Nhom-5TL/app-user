@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from 'axios';
 import { Sp } from '../api/SanPhams';
-  import { useAuth } from './AuthContext';
+  // import { useAuth } from './AuthContext';
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 const Index = () => {
   const [sansp, setSanPhams] = useState<Sp[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate(); // Khai báo useNavigate
-  const { isLoggedIn } = useAuth();
+  // const { isLoggedIn } = useAuth();
   useEffect(() => {
     const fetchSanPhams = async () => {
       try {
@@ -26,11 +26,32 @@ const Index = () => {
 
     fetchSanPhams();
   }, []);
+//   const handlePurchase =  () => {
+//     const token = localStorage.getItem('myData');
 
+//     if (!token) {
+//         throw new Error('User is not authenticated');
+//         navigate('/DangNhap');
+//     }
+
+//     try {
+//         const response = await axios.post(`https://localhost:7095/api/DonHang`, {}, {
+//             headers: {
+//                 'Authorization': `Bearer ${token}`
+//             }
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error('Error during checkout:', error);
+//         throw error;
+//     }
+// }
   const handlePurchase = () => {
-    if (!isLoggedIn) {
-      navigate('/DangNhap');
-  }
+    const maKH = localStorage.getItem('maKH');
+console.log(maKH);
+    if (maKH == null) {
+        navigate('/DangNhap');
+    }
 
     console.log('SanPham Data:', sansp);
     const invalidItems = sansp.filter(item => !item.maSP || item.maSP === undefined);

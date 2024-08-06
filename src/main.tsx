@@ -10,10 +10,12 @@ import Details from './component/Home/Product/Details';
 import DangKy from './component/Home/DangKy/DangKy';
 import DangNhap from './component/Home/DangKy/DangNhap';
 import PaymentForm from './component/Card/PaymentForm';
-import { AuthProvider } from './component/Card/AuthContext';
+// import { AuthProvider } from './component/Card/AuthContext';
 import PrivateRoute from './component/Home/DangKy/PrivateRoute'; // Điều chỉnh đường dẫn nếu cần
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS
+import TTKHH  from './component/Home/DangKy/TTKhH';
+import ConfirmRegistration from './component/Home/DangKy/ConfirmRegistration';
 
 const router = createBrowserRouter([
   {
@@ -49,12 +51,20 @@ const router = createBrowserRouter([
         element: <DangNhap />
       },
       {
+        path: "/TTKhH",
+        element: <TTKHH />
+      },
+      {
         path: "/PaymentForm",
         element: (
           <PrivateRoute>
             <PaymentForm />
           </PrivateRoute>
         )
+      },
+      {
+        path: "/confirm",
+        element: <ConfirmRegistration />
       }
     ],
   },
@@ -62,9 +72,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthProvider>
+    {/* <AuthProvider> */}
       <RouterProvider router={router} />
       <ToastContainer /> {/* Thêm ToastContainer vào đây */}
-    </AuthProvider>
+    {/* </AuthProvider> */}
   </React.StrictMode>
 );

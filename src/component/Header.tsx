@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import "./header.css";
+import { Link } from 'react-router-dom';
+import { getUser } from './authService'; 
 
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 
@@ -10,13 +12,48 @@ interface CartItem {
   gia: number;
   soLuong: number;
 }
-
 const Header = () => {
   const [showCard, setShowCard] = useState(false);
   const [showHeaderCart, setShowHeaderCart] = useState("");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
+// const user = useSelector((state) => state.au)
   // Hàm lấy dữ liệu giỏ hàng từ API
+  const [user, setUser] = useState<{ tenKh: string } | null>(null);
+ 
+  useEffect(() => {
+      // Hàm giả lập lấy thông tin người dùng
+      const fetchUser = async () => {
+          const currentUser = await getUser();
+          setUser(currentUser);
+      };
+
+      fetchUser();
+  }, []);
+  const handleLogout = async () => {
+     if(window.confirm('Bạn muốn đăng xuất không!')){
+      await axios.post(`https://localhost:7095/api/KhachHangs/DangXuat`);
+      localStorage.removeItem('maKH');
+      localStorage.removeItem('myData');
+      window.location.href = '/';
+     }
+  };
+  // const handleLogout = async () => {
+  //   try {
+  //     const response = await fetch(`https://localhost:7095/api/KhachHangs/DangXuat`, {
+  //       method: 'POST',
+  //       credentials: 'include', // Gửi cookie nếu cần
+  //     });
+  
+  //     if (response.ok) {
+  //       window.location.href = '/'; // Chuyển hướng đến trang chủ
+  //     } else {
+  //       const errorData = await response.json();
+  //       console.error('Logout failed:', errorData);
+  //     }
+  //   } catch (error) {
+  //     console.error('An error occurred:', error);
+  //   }
+  // };
   const fetchCartData = async () => {
     try {
       const response = await axios.get('https://localhost:7095/api/GioHangs');
@@ -93,7 +130,30 @@ const Header = () => {
                 <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" onClick={handleShowCard} data-notify={cartItems.length}>
                   <i className="zmdi zmdi-shopping-cart" />
                 </div>
-                <a href="/dangnhap" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 login-text">Đăng Nhập</a>
+                <div className="btn-group col-lg-4 col-6 text-right">
+            {user ? (
+                <>
+                    <button type="button" className="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+                    {user.tenKh}
+                    </button>
+                    <div className="dropdown-menu dropdown-menu-right">
+                        <Link to="/TTKhH" className="dropdown-item">Thông tin người dùng</Link>
+                        <button onClick={handleLogout} className="dropdown-item">Đăng Xuất</button>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <button type="button" className="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+                        Tài Khoản
+                    </button>
+                    <div className="dropdown-menu dropdown-menu-right">
+                        <Link to="/dangky" className="dropdown-item">Đăng Ký</Link>
+                        <Link to="/dangnhap" className="dropdown-item">Đăng Nhập</Link>
+                    </div>
+                </>
+            )}
+        </div>
+                {/* <a href="/dangnhap" className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 login-text">Đăng Nhập</a> */}
               </div>
             </nav>
           </div>
