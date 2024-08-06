@@ -11,7 +11,7 @@ const Test = () => {
         const fetchSanPhams = async () => {
             try {
                 const data = await getSanPhamAPI(); // getSanPhamAPI đã trả về data
-                setSanPhams(data); // data đã được xử lý bởi interceptor
+                setSanPhams(data.data); // data đã được xử lý bởi interceptor
                 setLoading(false);
             } catch (err) {
                 setError('Failed to fetch products');
