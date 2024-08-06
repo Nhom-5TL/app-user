@@ -29,10 +29,8 @@ const Header = () => {
 
   // Hàm xử lý khi nhấn vào icon giỏ hàng
   const handleShowCard = async () => {
-    if (!showCard) {
       // Nếu giỏ hàng không hiển thị, gọi lại API để tải dữ liệu
       await fetchCartData();
-    }
     setShowCard(!showCard);
     setShowHeaderCart(showHeaderCart ? "" : "show-header-cart");
   };
@@ -87,9 +85,7 @@ const Header = () => {
               </div>
               {/* Icon header */}
               <div className="wrap-icon-header flex-w flex-r-m">
-                <div>
-                  <div id="search-results"></div>
-                </div>
+
                 <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" onClick={handleShowCard} data-notify={cartItems.length}>
                   <i className="zmdi zmdi-shopping-cart" />
                 </div>
@@ -204,10 +200,10 @@ const Header = () => {
                 Tổng cộng: {formatPrice(total)}
               </div>
               <div className="header-cart-buttons flex-w w-full">
-  <a href="/card" className="flex-c-m stext-101 cl2 size-107 bg3 bor13 hov1 trans-04 p-lr-15" style={{marginLeft:-30}}>
-    Xem giỏ hàng
-  </a>
-</div>
+                <a href="/card" className="flex-c-m stext-101 cl2 size-107 bg3 bor13 hov1 trans-04 p-lr-15" style={{ marginLeft: -30 }}>
+                  Xem giỏ hàng
+                </a>
+              </div>
             </div>
           </div>
         </div>

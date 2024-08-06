@@ -12,6 +12,8 @@ import { toast } from 'react-toastify';
 
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 
+
+
 const Details: React.FC = () => {
     const [sansp, setSanPhams] = useState<Sp | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -78,12 +80,13 @@ const Details: React.FC = () => {
 
         try {
             const res = await axios.post(`https://localhost:7095/api/GioHangs`, SanPhamViewModel);
-            toast.success("Đã thêm vào giỏ hàng thành công")
+            // toast.success("Đã thêm vào giỏ hàng thành công")
             // navigate('/card');
+            toast.success("Thêm vào giỏ hàng thành công")
             return res.data;
         } catch (error) {
             console.error('Lỗi không xác định:', error);
-            toast.success("Thêm vào giỏ hàng thất bại")
+            toast.error("Thêm vào giỏ hàng thất bại")
         }
     };
 
