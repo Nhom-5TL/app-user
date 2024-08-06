@@ -15,7 +15,6 @@ import PrivateRoute from './component/Home/DangKy/PrivateRoute'; // Điều ch�
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS
 import TTKHH  from './component/Home/DangKy/TTKhH';
-import ConfirmRegistration from './component/Home/DangKy/ConfirmRegistration';
 
 const router = createBrowserRouter([
   {
@@ -62,10 +61,6 @@ const router = createBrowserRouter([
           </PrivateRoute>
         )
       },
-      {
-        path: "/confirm",
-        element: <ConfirmRegistration />
-      }
     ],
   },
 ]);
