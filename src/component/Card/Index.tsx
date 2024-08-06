@@ -1,71 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Sp } from '../api/SanPhams';
-  // import { useAuth } from './AuthContext';
+
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
+
 const Index = () => {
   const [sansp, setSanPhams] = useState<Sp[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate(); // Khai báo useNavigate
-  // const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchSanPhams = async () => {
       try {
-        const response = await axios.get<Sp[]>(
-          `https://localhost:7095/api/GioHangs`
-        );
+        const maKH = localStorage.getItem('maKH');
+        if (!maKH) {
+          return;
+        }
+
+        const response = await axios.get<Sp[]>(`https://localhost:7095/api/GioHangs/MaKH/${maKH}`);
         setSanPhams(response.data);
+        console.log(response.data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch products');
         setLoading(false);
       }
     };
 
     fetchSanPhams();
   }, []);
-//   const handlePurchase =  () => {
-//     const token = localStorage.getItem('myData');
 
-//     if (!token) {
-//         throw new Error('User is not authenticated');
-//         navigate('/DangNhap');
-//     }
-
-//     try {
-//         const response = await axios.post(`https://localhost:7095/api/DonHang`, {}, {
-//             headers: {
-//                 'Authorization': `Bearer ${token}`
-//             }
-//         });
-//         return response.data;
-//     } catch (error) {
-//         console.error('Error during checkout:', error);
-//         throw error;
-//     }
-// }
   const handlePurchase = () => {
     const maKH = localStorage.getItem('maKH');
-console.log(maKH);
-    if (maKH == null) {
-        navigate('/DangNhap');
+    if (!maKH) {
+      navigate('/DangNhap');
+      return;
     }
 
-    console.log('SanPham Data:', sansp);
     const invalidItems = sansp.filter(item => !item.maSP || item.maSP === undefined);
+    if (invalidItems.length > 0) {
+      return;
+    }
 
-  if (invalidItems.length > 0) {
-    setError('Một số sản phẩm có ID không hợp lệ hoặc bị thiếu.');
-    return;
-  }
     // Chuyển hướng đến trang thanh toán với dữ liệu giỏ hàng
     navigate('/PaymentForm', { state: { cartItems: sansp } });
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <>
@@ -98,7 +79,7 @@ console.log(maKH);
                         <tr className="table_row" key={key}>
                           <td className="column-1">
                             <div className="how-itemcart1">
-                              <img src={LinkImg + item.hinhAnh}  alt="IMG" />
+                              <img src={LinkImg + item.hinhAnh} alt="IMG" />
                             </div>
                           </td>
                           <td className="column-2">{item.tenSP}</td>
@@ -134,7 +115,7 @@ console.log(maKH);
         </div>
       </form>
     </>
-  )
+  );
 }
 
 export default Index;

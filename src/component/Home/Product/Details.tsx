@@ -12,8 +12,6 @@ import { toast } from 'react-toastify';
 
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 
-
-
 const Details: React.FC = () => {
     const [sansp, setSanPhams] = useState<Sp | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -69,24 +67,42 @@ const Details: React.FC = () => {
 
     const gioH = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        const maKH = localStorage.getItem('maKH');
+        if (!maKH) {
+            toast.error("Bạn cần đăng nhập trước khi thêm vào giỏ hàng");
+            navigate('/DangNhap');
+            return;
+        }
 
         const form = event.currentTarget as HTMLFormElement;
         const maKT = (form.elements.namedItem("size") as HTMLInputElement)?.value || '';
         const maMS = (form.elements.namedItem("color") as HTMLInputElement)?.value || '';
 
         const SanPhamViewModel = {
-            maSP, soLuong, maKT, maMS
+            maSP,
+            soLuong,
+            maKT,
+            maMS,
+            maKH
         };
 
         try {
             const res = await axios.post(`https://localhost:7095/api/GioHangs`, SanPhamViewModel);
-            // toast.success("Đã thêm vào giỏ hàng thành công")
-            // navigate('/card');
-            toast.success("Thêm vào giỏ hàng thành công")
+            toast.success("Thêm vào giỏ hàng thành công");
+
+            // Store the cart data in local storage
+            const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+            cartItems.push(SanPhamViewModel);
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+            // Update cart count in session storage
+            const currentCount = parseInt(sessionStorage.getItem('cartCount') || '0', 10);
+            sessionStorage.setItem('cartCount', (currentCount + 1).toString());
+
             return res.data;
         } catch (error) {
             console.error('Lỗi không xác định:', error);
-            toast.error("Thêm vào giỏ hàng thất bại")
+            toast.error("Thêm vào giỏ hàng thất bại");
         }
     };
 
@@ -94,7 +110,7 @@ const Details: React.FC = () => {
         style: 'currency',
         currency: 'VND'
     });
-  
+
     // Hàm thay thế ký hiệu ₫ bằng "VND"
     const formatPrice = (price: number) => {
         const formatted = currencyFormatter.format(price);

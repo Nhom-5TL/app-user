@@ -16,6 +16,7 @@ const Header = () => {
   const [showCard, setShowCard] = useState(false);
   const [showHeaderCart, setShowHeaderCart] = useState("");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
 // const user = useSelector((state) => state.au)
   // Hàm lấy dữ liệu giỏ hàng từ API
   const [user, setUser] = useState<{ tenKh: string } | null>(null);
@@ -56,8 +57,12 @@ const Header = () => {
   // };
   const fetchCartData = async () => {
     try {
-      const response = await axios.get('https://localhost:7095/api/GioHangs');
-      console.log(response);
+      const maKH = localStorage.getItem('maKH');
+      if (!maKH) {
+        return;
+      }
+      const response = await axios.get<CartItem[]>(`https://localhost:7095/api/GioHangs/MaKH/${maKH}`);
+      console.log(response.data);
       setCartItems(response.data);
     } catch (error) {
       console.error('Có lỗi khi lấy dữ liệu giỏ hàng:', error);
@@ -90,6 +95,7 @@ const Header = () => {
   };
   // Tính tổng số tiền giỏ hàng
   const total = cartItems.reduce((acc, item) => acc + item.gia * item.soLuong, 0);
+  if (error) return <div>{error}</div>;
 
   return (
     <>
@@ -233,11 +239,8 @@ const Header = () => {
             <ul className="header-cart-wrapitem w-full">
               {cartItems.length === 0 ? (
                 <li className="header-cart-item flex-w flex-t m-b-12">
-                  <div className="header-cart-item-img">
-                    <img src="images/icons/item-cart-01.jpg" alt="IMG" />
-                  </div>
                   <div className="header-cart-item-txt p-t-8">
-                    <a href="#" className="header-cart-item-name m-b-18 hov-cl1 trans-04">Chưa có sản phẩm nào</a>
+                    <a href="#" className="header-cart-item-name m-b-18 hov-cl1 trans-04">Giỏ hàng của bạn đang trống</a>
                     <span className="header-cart-item-info">...</span>
                   </div>
                 </li>
