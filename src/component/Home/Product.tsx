@@ -1,44 +1,54 @@
-import React, { useState, useEffect } from "react";
-import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đường dẫn tới file api
+import React, { useState, useEffect } from "react";// Đường dẫn tới file api
 import Card_pro from "./Product/Card_pro";
+import axios from 'axios';
+
+interface Loais {
+  maLoai: number;
+  tenLoai: string;
+}
 
 const Product = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showFilterItem, setShowFilterItem] = useState("none");
   const [showSearch, setShowSearch] = useState(false);
   const [showSearchItem, setShowSearchItem] = useState("none");
-  const [products, setProducts] = useState<Sp[]>([]); // State để lưu trữ sản phẩm với kiểu dữ liệu Sp[]
+  const [loais, setLoais] = useState<Loais[]>([]);
+  const [selectedLoai, setSelectedLoai] = useState<number | null>(null); // State để lưu mã loại đã chọn
+
+  useEffect(() => {
+    // Gọi API để lấy danh sách loại sản phẩm
+    const fetchLoais = async () => {
+      try {
+        const data = await axios.get(`https://localhost:7095/api/Loais`);
+        setLoais(data.data);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    };
+
+    fetchLoais();
+  }, []);
+
+  const handleLoaiClick = (maLoai: number) => {
+    setSelectedLoai(maLoai);
+  };
 
   const handleShowFilter = async () => {
-    await setShowFilter(!showFilter);
-    showFilter === false ? setShowFilterItem("block") : setShowFilterItem("none");
+    setShowFilter(!showFilter);
+    setShowFilterItem(showFilter ? "none" : "block");
 
-    if (showSearch === true) {
+    if (showSearch) {
       handleShowSearch();
     }
   };
 
   const handleShowSearch = async () => {
-    await setShowSearch(!showSearch);
-    showSearch === false ? setShowSearchItem("block") : setShowSearchItem("none");
-    if (showFilter === true) {
+    setShowSearch(!showSearch);
+    setShowSearchItem(showSearch ? "none" : "block");
+    if (showFilter) {
       handleShowFilter();
     }
   };
-
-  useEffect(() => {
-    // Gọi API để lấy dữ liệu sản phẩm
-    const fetchProducts = async () => {
-      try {
-        const data = await getSanPhamAPI(); // Lấy dữ liệu sản phẩm từ API
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
 
   return (
     <>
@@ -49,24 +59,18 @@ const Product = () => {
           </div>
           <div className="flex-w flex-sb-m p-b-52">
             <div className="flex-w flex-l-m filter-tope-group m-tb-10">
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-                All Products
+              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" onClick={() => handleLoaiClick(null)}>
+                Tất cả sản phẩm
               </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
-                Women
-              </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".men">
-                Men
-              </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-                Bag
-              </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".shoes">
-                Shoes
-              </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".watches">
-                Watches
-              </button>
+              {loais.map((item) => (
+                <button
+                  key={item.maLoai}
+                  className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+                  onClick={() => handleLoaiClick(item.maLoai)}
+                >
+                  {item.tenLoai}
+                </button>
+              ))}
             </div>
             <div className="flex-w flex-c-m m-tb-10">
               <div className="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter" onClick={handleShowFilter}>
@@ -234,12 +238,12 @@ const Product = () => {
                       Crafts
                     </a>
                   </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           <div className="row isotope-grid">
-          <Card_pro />  
+            <Card_pro selectedLoai={selectedLoai} />
           </div>
           {/* Load more */}
           <div className="flex-c-m flex-w w-full p-t-45">
