@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Sp } from '../../api/SanPhams';
 import axios from 'axios';
 
-const SPLQ = () => {
+interface SPLQProps {
+    excludeId: number; // Prop để nhận ID sản phẩm hiện tại và lọc ra
+}
+
+const SPLQ: React.FC<SPLQProps> = ({ excludeId }) => {
     const [sansp, setSanPhams] = useState<Sp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -13,7 +17,7 @@ const SPLQ = () => {
         const fetchSanPhams = async () => {
             try {
                 const response = await axios.get<Sp[]>("https://localhost:7095/api/SanPhams");
-                setSanPhams(response.data);
+                setSanPhams(response.data.filter(item => item.maSP !== excludeId)); // Lọc sản phẩm hiện tại
                 setLoading(false);
             } catch (err) {
                 setError('Failed to fetch products');
@@ -22,7 +26,8 @@ const SPLQ = () => {
         };
 
         fetchSanPhams();
-    }, []);
+    }, [excludeId]);
+
 
     const handleViewDetails = (maSP: number) => {
         navigate(`/${maSP}`);
