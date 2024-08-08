@@ -120,7 +120,12 @@ const Header = () => {
                     </ul>
                   </li>
                   <li><a href="/shop">Sản Phẩm</a></li>
-                  <li className="label1" data-label1="hot"><a href="shoping-cart.html">Features</a></li>
+                  {user ?(
+                    <li className="label1" data-label1="hot"><a href="\loadDH">DonHang</a></li>
+                  ): (
+                    ""
+                  )}
+                  
                   <li><a href="blog.html">Blog</a></li>
                   <li><a href="about.html">About</a></li>
                   <li><a href="contact.html">Contact</a></li>
