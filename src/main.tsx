@@ -15,6 +15,7 @@ import PrivateRoute from './component/Home/DangKy/PrivateRoute'; // Điều ch�
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS
 import TTKHH  from './component/Home/DangKy/TTKhH';
+import LoadDH from './component/DonHang/LoadDH';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "/TTKhH",
         element: <TTKHH />
+      },
+      {
+        path: "/loadDH",
+        element: <LoadDH />
       },
       {
         path: "/PaymentForm",

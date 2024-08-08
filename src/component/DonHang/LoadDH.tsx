@@ -12,6 +12,7 @@ const DonHangUse: React.FC = () => {
             try {
                 const maKH = localStorage.getItem('maKH');
         const response = await axios.get(`https://localhost:7095/api/DonHang/DonHUSER?maKH=${maKH}`);
+        console.log(response.data);
                 setDonHangs(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -70,7 +71,7 @@ const DonHangUse: React.FC = () => {
                         <tr key={donHang.id}>
                             <td >{donHang.id}</td>
                             <td>{donHang.tensp}</td>
-                            <td><img src={donHang.hinha} alt={donHang.tensp} style={{ maxWidth: '100px' }} /></td>
+                            <td><img src={donHang.hinha} alt={donHang.hinha} className="table-img" /></td>
                             <td>{donHang.tenKt}</td>
                             <td>{donHang.soluong}</td>
                             <td>{donHang.giaB}</td>

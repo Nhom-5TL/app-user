@@ -14,6 +14,8 @@ th {
     text-align: left;
 }
 
-img {
-    max-width: 100px;
+.table-img {
+    width: 100px;  /* Bạn có thể thay đổi kích thước này theo nhu cầu của mình */
+    height: 100px; /* Đảm bảo rằng chiều cao và chiều rộng đều được chỉ định để giữ kích thước hình ảnh cố định */
+    object-fit: cover; /* Giúp hình ảnh không bị biến dạng và lấp đầy khung hình */
 }
