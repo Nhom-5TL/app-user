@@ -203,7 +203,11 @@ const Header = () => {
           <ul className="main-menu-m">
             <li><a href="index.html">Trang chủ</a></li>
             <li><a href="product.html">Sản phẩm</a></li>
-            <li><a href="shoping-cart.html" className="label1 rs1" data-label1="hot">Features</a></li>
+            {user ?(
+                    <li className="label1" data-label1="hot"><a href="\loadDH">DonHang</a></li>
+                  ): (
+                    ""
+                  )}
             <li><a href="blog.html">Blog</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="contact.html">Contact</a></li>

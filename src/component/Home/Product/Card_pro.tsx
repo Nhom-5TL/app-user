@@ -17,27 +17,39 @@ const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
   const [sansp, setSanPhams] = useState<Sp[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastLoadedId, setLastLoadedId] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchSanPhams = async () => {
-      try {
-        const url = selectedLoai !== null 
-          ? `https://localhost:7095/api/SanPhams/filter?MaLoai=${selectedLoai}`
-          : "https://localhost:7095/api/SanPhams";
-        const response = await axios.get<Sp[]>(url);
-        console.log(url);
-        console.log(response);
-        setSanPhams(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch products');
-        setLoading(false);
-      }
-    };
-
-    fetchSanPhams();
+    fetchSanPhams(0); // Load the first set of products
   }, [selectedLoai]);
+
+  const fetchSanPhams = async (lastLoadedId: number) => {
+    try {
+      setLoading(true);
+      const url = selectedLoai !== null 
+        ? `https://localhost:7095/api/SanPhams/filter?MaLoai=${selectedLoai}&limit=8&lastLoadedId=${lastLoadedId}`
+        : `https://localhost:7095/api/SanPhams?limit=8&lastLoadedId=${lastLoadedId}`;
+      const response = await axios.get<Sp[]>(url);
+      const newProducts = response.data;
+      setSanPhams(prev => lastLoadedId === 0 ? newProducts : [...prev, ...newProducts]);
+      if (newProducts.length > 0) {
+        setLastLoadedId(newProducts[newProducts.length - 1].maSP);
+      }
+      if (newProducts.length < 8) {
+        setHasMore(false); // No more products to load
+      }
+      setLoading(false);
+    } catch (err) {
+      setError('Không thể lấy danh sách sản phẩm');
+      setLoading(false);
+    }
+  };
+
+  const loadMore = () => {
+    fetchSanPhams(lastLoadedId);
+  };
 
   const CtWeb = async (maSP: number) => {
     try {
@@ -45,11 +57,11 @@ const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
       setSanPhams(response.data);
       navigate(`/${maSP}`);
     } catch (error) {
-      console.error('Error in CtWeb:', error);
+      console.error('Lỗi trong CtWeb:', error);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading && sansp.length === 0) return <div>Đang tải...</div>;
   if (error) return <div>{error}</div>;
 
   // Tạo formatter cho tiền tệ VND
@@ -86,6 +98,13 @@ const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
           </div>
         </div>
       ))}
+      {hasMore && (
+        <div className="flex-c-m flex-w w-full p-t-45">
+          <button onClick={loadMore} className="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
+            Xem thêm
+          </button>
+        </div>
+      )}
     </>
   );
 };

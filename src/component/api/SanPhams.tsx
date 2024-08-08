@@ -15,7 +15,23 @@ export const getSanPhamAPI = async () => {
         throw error; // Đẩy lỗi lên để có thể xử lý trong component
     }
 };
-
+export interface DonH{
+    id: number,
+    hinha: string,
+    tensp: string,
+    tenKt: string,
+    soluong: number,
+    giaB: number,
+    thanhTien: number,
+    tinhTrang: number,
+    giamgia: number,
+    idkh: number,
+    trangThaiThanhToan: string,
+    ghiChu: string,
+    ngayNhan: Date,
+    ngayGiao: Date,
+    ngayHuy: Date
+  }
 // Định nghĩa kiểu dữ liệu sản phẩm
 export interface Sp {
     maSP: number;

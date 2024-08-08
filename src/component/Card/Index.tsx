@@ -45,7 +45,40 @@ const Index = () => {
     // Chuyển hướng đến trang thanh toán với dữ liệu giỏ hàng
     navigate('/PaymentForm', { state: { cartItems: sansp } });
   };
+  const handleMinus = async (maSP : number) => {
+    try {
+       
+         const res = await axios.put(`https://localhost:7095/api/GioHangs/giamsl?id=${maSP}`);
+        window.location.href = "/Card";
+       return res;
+    } catch (error) {
+        console.error('Lỗi không xác định:', error);
+        alert('Không thể giảm số lượng nhỏ hơn 1');
+    }
+};
 
+const handlePlus = async (maSP : number) => {
+  try {
+       
+    const res = await axios.put(`https://localhost:7095/api/GioHangs/tangsl?id=${maSP}`);
+   window.location.href = "/Card";
+  return res;
+} catch (error) {
+   console.error('Lỗi không xác định:', error);
+   alert('Không thể hủy hủy đơn hàng');
+}
+
+};
+const XoaSL = async (maSP : number) => {
+  try {
+       
+    const res = await axios.delete(`https://localhost:7095/api/GioHangs/xoagh?id=${maSP}`);
+   window.location.href = "/Card";
+  return res;
+} catch (error) {
+   console.error('Lỗi không xác định:', error);
+   alert('Không thể hủy hủy đơn hàng');
+}};
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -87,16 +120,18 @@ const Index = () => {
                           <td className="column-3">{item.gia} ₫</td>
                           <td className="column-4">
                             <div className="wrap-num-product flex-w m-l-auto m-r-0">
-                              <div className="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                              <div className="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onClick={() => handleMinus(item.maSP)}>
                                 <i className="fs-16 zmdi zmdi-minus" />
                               </div>
                               <input className="mtext-104 cl3 txt-center num-product" type="text" name="num-product1" defaultValue={item.soLuong} />
-                              <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                              <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onClick={() => handlePlus(item.maSP)}>
                                 <i className="fs-16 zmdi zmdi-plus" />
                               </div>
                             </div>
                           </td>
                           <td className="column-5">{item.gia * item.soLuong} ₫</td>
+                          <td className="column-5"><button className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"onClick={() => XoaSL(item.maSP)}>Xóa</button></td>
+                        
                         </tr>
                       ))}
                     </tbody>
