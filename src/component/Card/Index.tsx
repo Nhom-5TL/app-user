@@ -45,43 +45,43 @@ const Index = () => {
     // Chuyển hướng đến trang thanh toán với dữ liệu giỏ hàng
     navigate('/PaymentForm', { state: { cartItems: sansp } });
   };
-  const handleMinus = async (maSP : number) => {
+  const handleMinus = async (maSP: number) => {
     try {
-       
-         const res = await axios.put(`https://localhost:7095/api/GioHangs/giamsl?id=${maSP}`);
-        window.location.href = "/Card";
-       return res;
+
+      const res = await axios.put(`https://localhost:7095/api/GioHangs/giamsl?id=${maSP}`);
+      window.location.href = "/Card";
+      return res;
     } catch (error) {
-        console.error('Lỗi không xác định:', error);
-        alert('Không thể giảm số lượng nhỏ hơn 1');
+      console.error('Lỗi không xác định:', error);
+      alert('Không thể giảm số lượng nhỏ hơn 1');
     }
-};
+  };
 
-const handlePlus = async (maSP : number) => {
-  try {
-       
-    const res = await axios.put(`https://localhost:7095/api/GioHangs/tangsl?id=${maSP}`);
-   window.location.href = "/Card";
-  return res;
-} catch (error) {
-   console.error('Lỗi không xác định:', error);
-   alert('Không thể hủy hủy đơn hàng');
-}
+  const handlePlus = async (maSP: number) => {
+    try {
 
-};
-const XoaSL = async (maSP : number) => {
-  const confirmDelete = window.confirm("Bạn chắc chắn muốn xóa sản phẩm này không?");
-  if(confirmDelete){
-  try {
-    const res = await axios.delete(`https://localhost:7095/api/GioHangs/xoagh?id=${maSP}`);
-    window.location.href = "/Card";  // Tải lại trang sau khi xóa sản phẩm
-    return res;
-  } catch (error) {
-    console.error('Lỗi không xác định:', error);
-    alert('Không thể xóa sản phẩm này');
-  }
-}
-};
+      const res = await axios.put(`https://localhost:7095/api/GioHangs/tangsl?id=${maSP}`);
+      window.location.href = "/Card";
+      return res;
+    } catch (error) {
+      console.error('Lỗi không xác định:', error);
+      alert('Không thể hủy hủy đơn hàng');
+    }
+
+  };
+  const XoaSL = async (maSP: number) => {
+    const confirmDelete = window.confirm("Bạn chắc chắn muốn xóa sản phẩm này không?");
+    if (confirmDelete) {
+      try {
+        const res = await axios.delete(`https://localhost:7095/api/GioHangs/xoagh?id=${maSP}`);
+        window.location.href = "/Card";  // Tải lại trang sau khi xóa sản phẩm
+        return res;
+      } catch (error) {
+        console.error('Lỗi không xác định:', error);
+        alert('Không thể xóa sản phẩm này');
+      }
+    }
+  };
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -114,7 +114,7 @@ const XoaSL = async (maSP : number) => {
                       {sansp.map((item, key) => (
                         <tr className="table_row" key={key}>
                           <td className="column-1">
-                            <div className="how-itemcart1">
+                            <div className="how-itemcart1" onClick={() => XoaSL(item.maSP)}>
                               <img src={LinkImg + item.hinhAnh} alt="IMG" />
                             </div>
                           </td>
@@ -133,7 +133,7 @@ const XoaSL = async (maSP : number) => {
                             </div>
                           </td>
                           <td className="column-5">{item.gia * item.soLuong} ₫</td>
-                          <td className="column-5"><button className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"onClick={() => XoaSL(item.maSP)}>Xóa</button></td>
+
                         </tr>
                       ))}
                     </tbody>
