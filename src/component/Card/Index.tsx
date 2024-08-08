@@ -70,15 +70,18 @@ const handlePlus = async (maSP : number) => {
 
 };
 const XoaSL = async (maSP : number) => {
+  const confirmDelete = window.confirm("Bạn chắc chắn muốn xóa sản phẩm này không?");
+  if(confirmDelete){
   try {
-       
     const res = await axios.delete(`https://localhost:7095/api/GioHangs/xoagh?id=${maSP}`);
-   window.location.href = "/Card";
-  return res;
-} catch (error) {
-   console.error('Lỗi không xác định:', error);
-   alert('Không thể hủy hủy đơn hàng');
-}};
+    window.location.href = "/Card";  // Tải lại trang sau khi xóa sản phẩm
+    return res;
+  } catch (error) {
+    console.error('Lỗi không xác định:', error);
+    alert('Không thể xóa sản phẩm này');
+  }
+}
+};
   if (loading) return <div>Loading...</div>;
 
   return (
