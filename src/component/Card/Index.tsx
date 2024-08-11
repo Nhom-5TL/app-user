@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
-import { Sp } from '../api/SanPhams';
+import axios from "axios";
+import { Sp } from "../api/SanPhams";
 
 export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 
@@ -13,12 +13,14 @@ const Index = () => {
   useEffect(() => {
     const fetchSanPhams = async () => {
       try {
-        const maKH = localStorage.getItem('maKH');
+        const maKH = localStorage.getItem("maKH");
         if (!maKH) {
           return;
         }
 
-        const response = await axios.get<Sp[]>(`https://localhost:7095/api/GioHangs/MaKH/${maKH}`);
+        const response = await axios.get<Sp[]>(
+          `https://localhost:7095/api/GioHangs/MaKH/${maKH}`
+        );
         setSanPhams(response.data);
         console.log(response.data);
         setLoading(false);
@@ -31,19 +33,21 @@ const Index = () => {
   }, []);
 
   const handlePurchase = () => {
-    const maKH = localStorage.getItem('maKH');
+    const maKH = localStorage.getItem("maKH");
     if (!maKH) {
-      navigate('/DangNhap');
+      navigate("/DangNhap");
       return;
     }
 
-    const invalidItems = sansp.filter(item => !item.maSP || item.maSP === undefined);
+    const invalidItems = sansp.filter(
+      (item) => !item.maSP || item.maSP === undefined
+    );
     if (invalidItems.length > 0) {
       return;
     }
 
     // Chuyển hướng đến trang thanh toán với dữ liệu giỏ hàng
-    navigate('/PaymentForm', { state: { cartItems: sansp } });
+    navigate("/PaymentForm", { state: { cartItems: sansp } });
   };
 
   if (loading) return <div>Loading...</div>;
@@ -90,13 +94,20 @@ const Index = () => {
                               <div className="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                 <i className="fs-16 zmdi zmdi-minus" />
                               </div>
-                              <input className="mtext-104 cl3 txt-center num-product" type="text" name="num-product1" defaultValue={item.soLuong} />
+                              <input
+                                className="mtext-104 cl3 txt-center num-product"
+                                type="text"
+                                name="num-product1"
+                                defaultValue={item.soLuong}
+                              />
                               <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                 <i className="fs-16 zmdi zmdi-plus" />
                               </div>
                             </div>
                           </td>
-                          <td className="column-5">{item.gia * item.soLuong} ₫</td>
+                          <td className="column-5">
+                            {item.gia * item.soLuong} ₫
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -104,10 +115,22 @@ const Index = () => {
                 </div>
                 <div className="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
                   <div className="flex-w flex-m m-r-20 m-tb-5">
-                    <input className="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Mã Giảm Giá" />
-                    <div className="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">Xác nhận</div>
+                    <input
+                      className="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5"
+                      type="text"
+                      name="coupon"
+                      placeholder="Mã Giảm Giá"
+                    />
+                    <div className="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+                      Xác nhận
+                    </div>
                   </div>
-                  <div className="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" onClick={handlePurchase}>Mua Ngay</div>
+                  <div
+                    className="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10"
+                    onClick={handlePurchase}
+                  >
+                    Mua Ngay
+                  </div>
                 </div>
               </div>
             </div>
@@ -116,6 +139,6 @@ const Index = () => {
       </form>
     </>
   );
-}
+};
 
 export default Index;
