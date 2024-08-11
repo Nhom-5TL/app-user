@@ -1,42 +1,52 @@
 import React, { useState, useEffect } from "react";
 import Card_pro from "../Home/Product/Card_pro";
-import { getSanPhamAPI, Sp } from "../api/SanPhams"; // Đảm bảo đường dẫn đúng với file api.ts
+import { getSanPhamAPI, Sp } from "../api/SanPhams";
+import axios from 'axios'; // Đảm bảo đường dẫn đúng với file api.ts
+
+interface Loais {
+  maLoai: number;
+  tenLoai: string;
+}
 
 const Index = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showFilterItem, setShowFilterItem] = useState("none");
   const [showSearch, setShowSearch] = useState(false);
   const [showSearchItem, setShowSearchItem] = useState("none");
-  const [products, setProducts] = useState<Sp[]>([]); // State để lưu trữ danh sách sản phẩm
-
+  const [loais, setLoais] = useState<Loais[]>([]);
+  const [selectedLoai, setSelectedLoai] = useState<number | null>(null); // State để lưu mã loại đã chọn
 
   useEffect(() => {
-    // Gọi API để lấy danh sách sản phẩm khi component được mount
-    const fetchProducts = async () => {
+    // Gọi API để lấy danh sách loại sản phẩm
+    const fetchLoais = async () => {
       try {
-        const data = await getSanPhamAPI();
-        setProducts(data.data); // Lưu dữ liệu vào state
+        const data = await axios.get(`https://localhost:7095/api/Loais`);
+        setLoais(data.data);
       } catch (error) {
         console.error("Error fetching data", error);
       }
     };
 
-    fetchProducts();
+    fetchLoais();
   }, []);
 
-  const handleShowFilter = async () => {
-    await setShowFilter(!showFilter);
-    showFilter === false ? setShowFilterItem("block") : setShowFilterItem("none");
+  const handleLoaiClick = (maLoai: number) => {
+    setSelectedLoai(maLoai);
+  };
 
-    if (showSearch === true) {
+  const handleShowFilter = async () => {
+    setShowFilter(!showFilter);
+    setShowFilterItem(showFilter ? "none" : "block");
+
+    if (showSearch) {
       handleShowSearch();
     }
   };
 
   const handleShowSearch = async () => {
-    await setShowSearch(!showSearch);
-    showSearch === false ? setShowSearchItem("block") : setShowSearchItem("none");
-    if (showFilter === true) {
+    setShowSearch(!showSearch);
+    setShowSearchItem(showSearch ? "none" : "block");
+    if (showFilter) {
       handleShowFilter();
     }
   };
@@ -46,28 +56,22 @@ const Index = () => {
       <section className="bg0 p-t-23 p-b-140">
         <div className="container">
           <div className="p-b-10">
-            <h3 className="ltext-103 cl5">Product Overview</h3>
+            <h3 className="ltext-103 cl5">Sản phẩm</h3>
           </div>
           <div className="flex-w flex-sb-m p-b-52">
             <div className="flex-w flex-l-m filter-tope-group m-tb-10">
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-                All Products
+              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" onClick={() => handleLoaiClick(null)}>
+                Tất cả sản phẩm
               </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
-                Women
-              </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".men">
-                Men
-              </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-                Bag
-              </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".shoes">
-                Shoes
-              </button>
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".watches">
-                Watches
-              </button>
+              {loais.map((item) => (
+                <button
+                  key={item.maLoai}
+                  className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+                  onClick={() => handleLoaiClick(item.maLoai)}
+                >
+                  {item.tenLoai}
+                </button>
+              ))}
             </div>
             <div className="flex-w flex-c-m m-tb-10">
               <div className="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter" onClick={handleShowFilter}>
@@ -219,35 +223,30 @@ const Index = () => {
                 <div className="filter-col4 p-b-27">
                   <div className="mtext-102 cl2 p-b-15">Tags</div>
                   <div className="flex-w p-t-4 m-r--5">
-                    <a href="#" className="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
                       Fashion
                     </a>
-                    <a href="#" className="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
                       Lifestyle
                     </a>
-                    <a href="#" className="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
                       Denim
                     </a>
-                    <a href="#" className="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
                       Streetstyle
                     </a>
-                    <a href="#" className="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
                       Crafts
                     </a>
+                  </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
           <div className="row isotope-grid">
-            <Card_pro />
+            <Card_pro selectedLoai={selectedLoai} />
           </div>
           {/* Load more */}
-          <div className="flex-c-m flex-w w-full p-t-45">
-            <a href="#" className="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-              Xem thêm
-            </a>
-          </div>
         </div>
       </section>
     </>

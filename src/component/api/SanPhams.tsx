@@ -3,6 +3,7 @@ import axiosClient from './axiosClient';
 // Định nghĩa các endpoint
 const END_POINTS = {
     SanPham: 'SanPhams',
+    DonHang: 'DonHang/DonHUSER'
 };
 
 // Hàm gọi API để lấy danh sách sản phẩm
@@ -15,7 +16,50 @@ export const getSanPhamAPI = async () => {
         throw error; // Đẩy lỗi lên để có thể xử lý trong component
     }
 };
-
+export interface DonH{
+    id: number,
+    hinha: string,
+    tensp: string,
+    tenKt: string,
+    soluong: number,
+    giaB: number,
+    thanhTien: number,
+    tinhTrang: number,
+    giamgia: number,
+    idkh: number,
+    trangThaiThanhToan: string,
+    ghiChu: string,
+    ngayNhan: Date,
+    ngayGiao: Date,
+    ngayHuy: Date
+  }
+// export const getDonHangUse = async () => {
+//     try {
+//         const maKH = localStorage.getItem('maKH');
+//         const response = await axiosClient.get(`https://localhost:7095/api/DonHang/DonHUSER?maKH=6`);
+//         return response; // Data đã được xử lý bởi interceptor
+//     } catch (error) {
+//         console.error('Error fetching data', error);
+//         throw error; // Đẩy lỗi lên để có thể xử lý trong component
+//     }
+// };
+export interface DonH{
+    id: number,
+    hinha: string,
+    tensp: string,
+    tenKt: string,
+    soluong: number,
+    giaB: number,
+    thanhTien: number,
+    tinhTrang: number,
+    giamgia: number,
+    idkh: number,
+    trangThaiThanhToan: string,
+    ghiChu: string,
+    ngayNhan: Date,
+    ngayGiao: Date,
+    ngayHuy: Date
+  }
 // Định nghĩa kiểu dữ liệu sản phẩm
 export interface Sp {
     maSP: number;

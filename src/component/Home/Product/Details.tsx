@@ -245,7 +245,7 @@ const Details: React.FC = () => {
                         <h3 className="ltext-106 cl5 txt-center">Sản phẩm liên quan</h3>
                     </div>
                     <div className="row isotope-grid">
-            <SPLQ />
+                    <SPLQ excludeId={parseInt(maSP!)} />
           </div>
                     <div className="row isotope-grid"></div>
                 </div>

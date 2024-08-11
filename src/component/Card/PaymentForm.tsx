@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './payment-form.css';
 
-
-interface chiTietDonHangs {
+interface ChiTietDonHang {
     maSP: number;
     tenSP: string;
     tenKT: string;
@@ -22,15 +21,15 @@ const PaymentForm: React.FC = () => {
     const [phone, setPhone] = useState<string>('');
     const [note, setNote] = useState<string>('');
     const [paymentMethod, setPaymentMethod] = useState<string>('COD');
-    const [cartItems, setCartItems] = useState<chiTietDonHangs[]>([]);
+    const [cartItems, setCartItems] = useState<ChiTietDonHang[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [maKH, setCustomerId] = useState<string | null>(null);
-    const na = useNavigate();
-// const {maSP} = useParams<{ maSP: string }>();
+    const navigate = useNavigate();
+    const [formErrors, setFormErrors] = useState<{ [key: string]: string[] }>({});
+
     useEffect(() => {
-        
-        const data = location.state as { cartItems: chiTietDonHangs[] };
+        const data = location.state as { cartItems: ChiTietDonHang[] };
         if (data && data.cartItems) {
             setCartItems(data.cartItems);
         } else {
@@ -51,63 +50,41 @@ const PaymentForm: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-    
+
         if (!maKH) {
             setError('ID khách hàng không có sẵn. Vui lòng đăng nhập lại.');
             return;
         }
-    
-        // Kiểm tra giá trị MaSP trong giỏ hàng
-        // const invalidItems = cartItems.filter(item => !item.MaSP || item.MaSP === undefined);
-        console.log( name,
-            address,
-            phone,
-           note,
-          paymentMethod,
-          maKH,
-            cartItems.map(item => ({
-                MaSP: item.maSP,
-               MaMauSac: item.tenMS,
-               MaKichThuoc: item.tenKT,
-               SoLuong: item.soLuong,
-               DonGia: item.gia,
-               TenSP: item.tenSP
 
-           })),
-           )
-        // if (invalidItems.length > 0) {
-        //     setError('Một số sản phẩm có ID không hợp lệ hoặc bị thiếu.');
-        //     return;
-        // }
-        const DonHang = {
+        const DonHangPoST = {
             tenKh: name,
-                diaChi: address,
-                sdt: phone,
-                ghiChu: note,
-                trangThaiThanhToan: paymentMethod,
-                maKH: maKH,
-                chiTietDonHangs: cartItems.map(item => ({
-                    maSP: item.maSP,
-                    tenMS: item.tenMS,
-                    tenKT: item.tenKT,
-                    soLuong: item.soLuong,
-                    donGia: item.gia,
-                    tenSP: item.tenSP
-                })),
-                
-        }
-    
+            diaChi: address,
+            sdt: phone,
+            ghiChu: note,
+            trangThaiThanhToan: paymentMethod,
+            maKH: maKH,
+            chiTietDonHangs: cartItems.map(item => ({
+                maSP: item.maSP,
+                tenMS: item.tenMS,
+                tenKT: item.tenKT,
+                soLuong: item.soLuong,
+                donGia: item.gia,
+                tenSP: item.tenSP
+            })),
+        };
+
         try {
-            const response = await axios.post('https://localhost:7095/api/DonHang/CreateOrder', DonHang);
-            alert('Thanh toán thành công!')
+            const response = await axios.post('https://localhost:7095/api/GioHangs/CreateOrder', DonHangPoST);
+            alert('Thanh toán thành công!');
             setSuccess('Đơn hàng đã được tạo thành công.');
             setError(null);
-            na('/')
+            navigate('/');
             console.log('Order created:', response.data);
-            return response.data;
         } catch (error) {
-            if (axios.isAxiosError(error)) {
+            if (axios.isAxiosError(error) && error.response && error.response.data) {
+                const { errors } = error.response.data;
                 setError(`Lỗi: ${error.message}`);
+                setFormErrors(errors);
             } else {
                 setError('Không thể tạo đơn hàng. Vui lòng thử lại.');
             }
@@ -122,18 +99,30 @@ const PaymentForm: React.FC = () => {
                 <label>
                     Tên:
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                    {formErrors.TenKh && (
+                        <p className="error text-danger">{formErrors.TenKh.join(', ')}</p>
+                    )}
                 </label>
                 <label>
                     Địa chỉ:
                     <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required />
+                    {formErrors.DiaChi && (
+                        <p className="error text-danger">{formErrors.DiaChi.join(', ')}</p>
+                    )}
                 </label>
                 <label>
                     Số điện thoại:
                     <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                    {formErrors.SDT && (
+                        <p className="error text-danger">{formErrors.SDT.join(', ')}</p>
+                    )}
                 </label>
                 <label>
                     Ghi chú:
                     <textarea value={note} onChange={(e) => setNote(e.target.value)} />
+                    {formErrors.GhiChu && (
+                        <p className="error text-danger">{formErrors.GhiChu.join(', ')}</p>
+                    )}
                 </label>
                 <label>
                     Phương thức thanh toán:
@@ -160,7 +149,7 @@ const PaymentForm: React.FC = () => {
                                 <tr key={item.maSP}>
                                     <td>{item.tenSP}</td>
                                     <td>{item.tenKT}</td>
-                                    <td >{item.tenMS}</td>
+                                    <td>{item.tenMS}</td>
                                     <td>{item.gia} ₫</td>
                                     <td>{item.soLuong}</td>
                                     <td>{item.gia * item.soLuong} ₫</td>
