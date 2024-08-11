@@ -98,7 +98,7 @@ const PaymentForm: React.FC = () => {
         }
     
         try {
-            const response = await axios.post('https://localhost:7095/api/DonHang/CreateOrder', DonHang);
+            const response = await axios.post('https://localhost:7095/api/GioHangs/CreateOrder', DonHang);
             alert('Thanh toán thành công!')
             setSuccess('Đơn hàng đã được tạo thành công.');
             setError(null);
