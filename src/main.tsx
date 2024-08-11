@@ -15,9 +15,9 @@ import PrivateRoute from './component/Home/DangKy/PrivateRoute'; // Điều ch�
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS
 import TTKHH  from './component/Home/DangKy/TTKhH';
+import ConfirmRegistration from './component/Home/DangKy/ConfirmRegistration';
 import LoadDH from './component/DonHang/LoadDH';
 import CTDH from './component/DonHang/CTDH';
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/shop",
         element: <Shop />
+      },
+      {
+        path: "/loadDH",
+        element: <LoadDH />
       },
       {
         path: "/card",
@@ -71,6 +75,10 @@ const router = createBrowserRouter([
           </PrivateRoute>
         )
       },
+      {
+        path: "/confirm",
+        element: <ConfirmRegistration />
+      }
     ],
   },
 ]);
