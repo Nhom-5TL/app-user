@@ -23,7 +23,10 @@ interface ChiTietDonHang {
     ghiChu: string;
     trangThaiThanhToan: string;
     ngayGiao: Date,
-    hinha : string
+    hinha : string,
+    xaPhuong : string,
+tinhThanh : string,
+quanHuyen : string,
 }
 const DonHangUse: React.FC = () => {
     const [donHangs, setDonHangs] = useState<DonH[]>([]);
@@ -31,6 +34,9 @@ const DonHangUse: React.FC = () => {
     const [selectedOrder, setSelectedOrder] = useState<ChiTietDonHang[]>([]);
     // const { maDH } = useParams<{ maDH: string }>();
     const [showModal, setShowModal] = useState(false);
+    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [pageSize] = useState<number>(10);
+    const [totalRecords, setTotalRecords] = useState<number>(0);
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -38,9 +44,12 @@ const DonHangUse: React.FC = () => {
         const fetchData = async () => {
             try {
                 const maKH = localStorage.getItem('maKH');
-        const response = await axios.get(`https://localhost:7095/api/DonHang/DonHUSER?maKH=${maKH}`);
+        const response = await axios.get(`https://localhost:7095/api/DonHang/DonHUSER?maKH=${maKH}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
         console.log(response.data);
-                setDonHangs(response.data);
+        const data = response.data;
+        setDonHangs(data.data);
+        setTotalRecords(data.totalRecords);
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -49,7 +58,7 @@ const DonHangUse: React.FC = () => {
         };
 
         fetchData();
-    }, []);
+    }, [pageNumber, pageSize]);
     const HuyDH = async (idDonHang : number) => {
         try {
            
@@ -85,9 +94,14 @@ const DonHangUse: React.FC = () => {
           alert('Không thể lấy chi tiết đơn hàng');
         }
       };
+      const handlePageChange = (newPageNumber: number) => {
+        setPageNumber(newPageNumber);
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
+    const totalPages = Math.ceil(totalRecords / pageSize);
 
     return (
         <>
@@ -133,7 +147,7 @@ const DonHangUse: React.FC = () => {
                             <td>{donHang.tensp}</td>
                             <td><img src={LinkImg + donHang.hinha} alt={donHang.hinha} className="table-img" /></td>
                             <td>{donHang.tenKh}</td>
-                            <td>{donHang.diaChi}</td>
+                            <td>{donHang.tinhThanh} - {donHang.xaPhuong} - {donHang.quanHuyen} - {donHang.diaChi}</td>
                             <td>{donHang.sdt}</td>
                             <td>{donHang.trangThaiThanhToan}</td>
                             {donHang.tinhTrang == 3 ? (
@@ -182,6 +196,30 @@ const DonHangUse: React.FC = () => {
                 </tbody>
                 
             </table>
+            <div className="pagination">
+                                    <Button
+                                        disabled={                                        pageNumber <= 1}
+                                        onClick={() => handlePageChange(pageNumber - 1)}
+                                    >
+                                        Trước
+                                    </Button>
+                                    {Array.from({ length: totalPages }, (_, index) => (
+                                        <Button
+                                            key={index + 1}
+                                            variant={index + 1 === pageNumber ? 'primary' : 'secondary'}
+                                            onClick={() => handlePageChange(index + 1)}
+                                        >
+                                            {index + 1}
+                                        </Button>
+                                    ))}
+                                    <Button
+                                        disabled={pageNumber >= totalPages}
+                                        onClick={() => handlePageChange(pageNumber + 1)}
+                                    >
+                                        Sau
+                                    </Button>
+                                </div>
+
             <div className="bg0 p-t-104 p-b-116">
             <Modal  className=" p-t-104 "
          show={showModal} onHide={handleClose} size="lg">
@@ -220,7 +258,7 @@ const DonHangUse: React.FC = () => {
         <div className="row mb-3">
           <div className="col-md-6">
             <h4>Thông tin người đặt</h4>
-            <p><strong>Địa chỉ:</strong> {selectedOrder.length > 0 ? selectedOrder[0].diaChi : ''}</p>
+            <p><strong>Địa chỉ:</strong> {selectedOrder.length > 0 ? selectedOrder[0].tinhThanh  : ''} -  {selectedOrder.length > 0 ? selectedOrder[0].xaPhuong  : ''} -  {selectedOrder.length > 0 ? selectedOrder[0].quanHuyen  : ''} - {selectedOrder.length > 0 ? selectedOrder[0].diaChi  : ''}</p>
             <p><strong>Số điện thoại:</strong> {selectedOrder.length > 0 ? selectedOrder[0].sdt : ''}</p>
             <p><strong>Tên người đặt:</strong> {selectedOrder.length > 0 ? selectedOrder[0].tenKh : ''}</p>
             <p><strong>Ngày đặt:</strong> {selectedOrder.length > 0 ? new Date(selectedOrder[0].ngayGiao).toLocaleDateString('en-GB') : ''}</p>

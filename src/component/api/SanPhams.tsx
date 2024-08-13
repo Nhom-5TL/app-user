@@ -31,7 +31,10 @@ export interface DonH{
     ghiChu: string,
     ngayNhan: Date,
     ngayGiao: Date,
-    ngayHuy: Date
+    ngayHuy: Date,
+    xaPhuong : string,
+    tinhThanh : string,
+    quanHuyen : string,
   }
 // export const getDonHangUse = async () => {
 //     try {
