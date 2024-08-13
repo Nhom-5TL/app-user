@@ -48,6 +48,9 @@ export interface DonH{
     hinha: string,
     tensp: string,
     tenKt: string,
+    tenKh: string,
+    diaChi: string,
+    sdt: string,
     soluong: number,
     giaB: number,
     thanhTien: number,
@@ -59,6 +62,7 @@ export interface DonH{
     ngayNhan: Date,
     ngayGiao: Date,
     ngayHuy: Date
+    
   }
 // Định nghĩa kiểu dữ liệu sản phẩm
 export interface Sp {
