@@ -4,8 +4,10 @@ import { DonH} from '../api/SanPhams';
 import axios from 'axios';
  import './LoadDH.css';
  import { Modal, Button, Table } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 // import { setTimeout } from 'timers/promises';
+
+export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 interface ChiTietDonHang {
     maSP: number;
     tensp: string;
@@ -20,8 +22,8 @@ interface ChiTietDonHang {
     sdt: string;
     ghiChu: string;
     trangThaiThanhToan: string;
-    ngayGiao: Date
-
+    ngayGiao: Date,
+    hinha : string
 }
 const DonHangUse: React.FC = () => {
     const [donHangs, setDonHangs] = useState<DonH[]>([]);
@@ -129,7 +131,7 @@ const DonHangUse: React.FC = () => {
                         <tr key={donHang.id}>
                             <td >{donHang.id}</td>
                             <td>{donHang.tensp}</td>
-                            <td><img src={donHang.hinha} alt={donHang.hinha} className="table-img" /></td>
+                            <td><img src={LinkImg + donHang.hinha} alt={donHang.hinha} className="table-img" /></td>
                             <td>{donHang.tenKh}</td>
                             <td>{donHang.diaChi}</td>
                             <td>{donHang.sdt}</td>
@@ -158,7 +160,7 @@ const DonHangUse: React.FC = () => {
                                 <td>{donHang.ngayNhan ? new Date(donHang.ngayNhan).toLocaleDateString('en-GB')  : 'Chưa nhận'}</td> 
                                 <td>{donHang.ghiChu}</td>
                                 <td ><button className=" stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15  trans-04 js-addcart-detail" 
-                                onClick={() => CTDH(donHang.id)}>CT Đơn Hàng</button>
+                                onClick={() => CTDH(donHang.id)}style={{ marginBottom: '10px' }}>CT Đơn Hàng</button>
                                      <button className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" 
                                 onClick={() => HuyDH(donHang.id)}>Hủy Đơn Hàng</button></td>
                                 </>
@@ -204,7 +206,7 @@ const DonHangUse: React.FC = () => {
             {selectedOrder.map((item, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td><img src={item.tenKT} alt={item.tensp} className="table-img" /></td>
+                <td><img src={LinkImg + item.hinha } alt={item.tensp} className="table-img" /></td>
                 <td>{item.tensp}</td>
                 <td>{item.soLuong}</td>
                 <td>{item.tenKT}</td>
