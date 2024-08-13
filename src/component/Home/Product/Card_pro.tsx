@@ -22,24 +22,26 @@ const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchSanPhams(0); // Load the first set of products
+    // Reset the last loaded ID and product list when the category changes
+    setLastLoadedId(0);
+    setSanPhams([]);
+    fetchSanPhams(0, true); // Load the first set of products for the selected category
   }, [selectedLoai]);
 
-  const fetchSanPhams = async (lastLoadedId: number) => {
+  const fetchSanPhams = async (lastLoadedId: number, reset: boolean = false) => {
     try {
       setLoading(true);
-      const url = selectedLoai !== null 
+      const url = selectedLoai !== null
         ? `https://localhost:7095/api/SanPhams/filter?MaLoai=${selectedLoai}&limit=8&lastLoadedId=${lastLoadedId}`
         : `https://localhost:7095/api/SanPhams?limit=8&lastLoadedId=${lastLoadedId}`;
       const response = await axios.get<Sp[]>(url);
       const newProducts = response.data;
-      setSanPhams(prev => lastLoadedId === 0 ? newProducts : [...prev, ...newProducts]);
+      setSanPhams(prev => reset ? newProducts : [...prev, ...newProducts]);
+
       if (newProducts.length > 0) {
         setLastLoadedId(newProducts[newProducts.length - 1].maSP);
       }
-      if (newProducts.length < 8) {
-        setHasMore(false); // No more products to load
-      }
+      setHasMore(newProducts.length === 8);
       setLoading(false);
     } catch (err) {
       setError('Không thể lấy danh sách sản phẩm');

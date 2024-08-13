@@ -29,7 +29,7 @@ const Product = () => {
     fetchLoais();
   }, []);
 
-  const handleLoaiClick = (maLoai: number) => {
+  const handleLoaiClick = (maLoai: number | null) => {
     setSelectedLoai(maLoai);
   };
 
