@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sp } from '../../api/SanPhams';
 import axios from 'axios';
-
+import '/src/component/Home/Product/SPXN.css';
+interface SPLQProps {
+    excludeId?: number; // Use optional if it's not always required
+}
 const SPXN: React.FC<SPLQProps> = ({ excludeId }) => {
     const [sansp, setSanPhams] = useState<Sp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -14,8 +17,7 @@ const SPXN: React.FC<SPLQProps> = ({ excludeId }) => {
             try {
                 const response = await axios.get<Sp[]>("https://localhost:7095/api/SanPhams");
                 // Sắp xếp và giới hạn số lượng sản phẩm
-                const sortedProducts = response.data
-                    .filter(item => item.maSP !== excludeId) // Lọc sản phẩm hiện tại
+                const sortedProducts = response.data // Lọc sản phẩm hiện tại
                     .sort((a, b) => b.soLuotXem - a.soLuotXem) // Sắp xếp theo số lượt xem giảm dần
                     .slice(0, 4); // Lấy 4 sản phẩm đầu tiên
 
@@ -50,6 +52,7 @@ const SPXN: React.FC<SPLQProps> = ({ excludeId }) => {
                     <div className="block2">
                         <div className="block2-pic hov-img0">
                             <img src={item.hinhAnhURL} alt="IMG-PRODUCT" />
+                            <span className="hot-banner">HOT</span>
                             <a 
                                 onClick={() => handleViewDetails(item.maSP)} 
                                 className="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"

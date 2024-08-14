@@ -11,9 +11,23 @@ interface Sp {
 
 interface Card_proProps {
   selectedLoai: number | null;
+  selectedBrand: number | null;
+  selectedSize: string | null;
+  selectedColor: string | null;
+  minPrice: number | null;
+  maxPrice: number | null;
+  searchTerm: string;
 }
 
-const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
+const Card_pro: React.FC<Card_proProps> = ({
+  selectedLoai,
+  selectedBrand,
+  selectedSize,
+  selectedColor,
+  minPrice,
+  maxPrice,
+  searchTerm
+}) => {
   const [sansp, setSanPhams] = useState<Sp[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,29 +36,38 @@ const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Reset the last loaded ID and product list when the category changes
+    // Reset lại ID sản phẩm đã tải và danh sách sản phẩm khi bộ lọc hoặc từ khóa tìm kiếm thay đổi
     setLastLoadedId(0);
     setSanPhams([]);
-    fetchSanPhams(0, true); // Load the first set of products for the selected category
-  }, [selectedLoai]);
+    fetchSanPhams(0, true); // Tải sản phẩm đầu tiên
+  }, [selectedLoai, selectedBrand, selectedSize, selectedColor, minPrice, maxPrice, searchTerm]);
 
   const fetchSanPhams = async (lastLoadedId: number, reset: boolean = false) => {
     try {
       setLoading(true);
-      const url = selectedLoai !== null
-        ? `https://localhost:7095/api/SanPhams/filter?MaLoai=${selectedLoai}&limit=8&lastLoadedId=${lastLoadedId}`
-        : `https://localhost:7095/api/SanPhams?limit=8&lastLoadedId=${lastLoadedId}`;
-      const response = await axios.get<Sp[]>(url);
-      const newProducts = response.data;
-      setSanPhams(prev => reset ? newProducts : [...prev, ...newProducts]);
+      const params = {
+        MaLoai: selectedLoai,
+        MaNhanHieu: selectedBrand,
+        TenKichThuoc: selectedSize,
+        TenMauSac: selectedColor,
+        GiaToiThieu: minPrice,
+        GiaToiDa: maxPrice,
+        SearchTerm: searchTerm,
+        limit: 8,
+        lastLoadedId: lastLoadedId
+      };
 
-      if (newProducts.length > 0) {
-        setLastLoadedId(newProducts[newProducts.length - 1].maSP);
+      const { data } = await axios.get<Sp[]>('https://localhost:7095/api/SanPhams/filter', { params });
+      setSanPhams(prev => reset ? data : [...prev, ...data]);
+
+      if (data.length > 0) {
+        setLastLoadedId(data[data.length - 1].maSP);
       }
-      setHasMore(newProducts.length === 8);
+      setHasMore(data.length === 8);
       setLoading(false);
     } catch (err) {
-      setError('Không thể lấy danh sách sản phẩm');
+      console.error('Lỗi khi lấy sản phẩm', err);
+      setError('Không thể tải sản phẩm.');
       setLoading(false);
     }
   };
@@ -53,19 +76,9 @@ const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
     fetchSanPhams(lastLoadedId);
   };
 
-  const CtWeb = async (maSP: number) => {
-    try {
-      await axios.post(`https://localhost:7095/api/SanPhams/update-views/${maSP}`);
-      const response = await axios.get<Sp[]>(`https://localhost:7095/api/SanPhams/${maSP}`);
-      setSanPhams(response.data);
-      navigate(`/${maSP}`);
-    } catch (error) {
-      console.error('Lỗi trong CtWeb:', error);
-    }
+  const handleProductClick = (maSP: number) => {
+    navigate(`/${maSP}`);
   };
-
-  if (loading && sansp.length === 0) return <div>Đang tải...</div>;
-  if (error) return <div>{error}</div>;
 
   // Tạo formatter cho tiền tệ VND
   const currencyFormatter = new Intl.NumberFormat('vi-VN', {
@@ -74,24 +87,29 @@ const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
   });
 
   const formatPrice = (price: number) => {
-    const formatted = currencyFormatter.format(price);
-    return formatted.replace('₫', 'VND');
+    return currencyFormatter.format(price).replace('₫', 'VND');
   };
+
+  if (loading && sansp.length === 0) return <div>Đang tải...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <>
-      {sansp.map((item, key) => (
-        <div className="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" key={key}>
+      {sansp.map((item) => (
+        <div className="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" key={item.maSP}>
           <div className="block2">
             <div className="block2-pic hov-img0">
-              <img src={item.hinhAnhURL} alt="IMG-PRODUCT" />
-              <a onClick={() => CtWeb(item.maSP)} className="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+              <img src={item.hinhAnhURL} alt={item.tenSP} />
+              <a 
+                onClick={() => handleProductClick(item.maSP)} 
+                className="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
+              >
                 Chi tiết sản phẩm
               </a>
             </div>
             <div className="block2-txt flex-w flex-t p-t-14">
               <div className="block2-txt-child1 flex-col-l">
-                <a href="product-detail.html" className="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                <a href={`/${item.maSP}`} className="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                   {item.tenSP}
                 </a>
                 <span className="stext-105 cl3">{formatPrice(item.gia)}</span>
