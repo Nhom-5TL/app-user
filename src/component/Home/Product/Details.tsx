@@ -1,4 +1,4 @@
-import { useEffect, useState, FormEvent } from 'react';
+import { useEffect, useState, FormEvent, ChangeEvent } from 'react';
 import $ from 'jquery';
 import 'slick-carousel';
 import 'slick-carousel/slick/slick.css';
@@ -55,6 +55,15 @@ const Details: React.FC = () => {
         return () => clearTimeout(timer);
     }, []);
 
+    const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const value = Number(event.target.value);
+        if (value >= 1 && value <= 10) {
+            setQuantity(value);
+        } else {
+            setQuantity(1); // Or display an error message
+        }
+    };
+
     const handleMinus = () => {
         if (soLuong > 1) {
             setQuantity(soLuong - 1);
@@ -62,7 +71,9 @@ const Details: React.FC = () => {
     };
 
     const handlePlus = () => {
-        setQuantity(soLuong + 1);
+        if (soLuong < 10) {
+            setQuantity(soLuong + 1);
+        }
     };
 
     const gioH = async (event: FormEvent<HTMLFormElement>) => {
@@ -199,10 +210,12 @@ const Details: React.FC = () => {
                                                         </div>
                                                         <input
                                                             className="mtext-104 cl3 txt-center num-product"
-                                                            type="text"
+                                                            type="number"
                                                             name="soLuong"
                                                             value={soLuong}
-                                                            readOnly
+                                                            min="1"
+                                                            max="10"
+                                                            onChange={handleQuantityChange}
                                                         />
                                                         <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onClick={handlePlus}>
                                                             <i className="fs-16 zmdi zmdi-plus" />

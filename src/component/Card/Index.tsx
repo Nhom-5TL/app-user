@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Sp } from "../api/SanPhams";
@@ -22,7 +22,6 @@ const Index = () => {
           `https://localhost:7095/api/GioHangs/MaKH/${maKH}`
         );
         setSanPhams(response.data);
-        console.log(response.data);
         setLoading(false);
       } catch (err) {
         setLoading(false);
@@ -49,31 +48,43 @@ const Index = () => {
     // Chuyển hướng đến trang thanh toán với dữ liệu giỏ hàng
     navigate("/PaymentForm", { state: { cartItems: sansp } });
   };
+
   const handleMinus = async (maSP: number) => {
     try {
-      const res = await axios.put(
-        `https://localhost:7095/api/GioHangs/giamsl?id=${maSP}`
-      );
-      window.location.href = "/Card";
-      return res;
+      const item = sansp.find(item => item.maSP === maSP);
+      if (item && item.soLuong > 1) {
+        const res = await axios.put(
+          `https://localhost:7095/api/GioHangs/giamsl?id=${maSP}`
+        );
+        setSanPhams(sansp.map(sp => sp.maSP === maSP ? { ...sp, soLuong: sp.soLuong - 1 } : sp));
+        return res;
+      } else {
+        alert("Số lượng không thể giảm nhỏ hơn 1");
+      }
     } catch (error) {
       console.error("Lỗi không xác định:", error);
-      alert("Không thể giảm số lượng nhỏ hơn 1");
+      alert("Không thể giảm số lượng");
     }
   };
 
   const handlePlus = async (maSP: number) => {
     try {
-      const res = await axios.put(
-        `https://localhost:7095/api/GioHangs/tangsl?id=${maSP}`
-      );
-      window.location.href = "/Card";
-      return res;
+      const item = sansp.find(item => item.maSP === maSP);
+      if (item && item.soLuong < 10) {
+        const res = await axios.put(
+          `https://localhost:7095/api/GioHangs/tangsl?id=${maSP}`
+        );
+        setSanPhams(sansp.map(sp => sp.maSP === maSP ? { ...sp, soLuong: sp.soLuong + 1 } : sp));
+        return res;
+      } else {
+        alert("Số lượng không thể vượt quá 10");
+      }
     } catch (error) {
       console.error("Lỗi không xác định:", error);
-      alert("Không thể hủy hủy đơn hàng");
+      alert("Không thể tăng số lượng");
     }
   };
+
   const XoaSL = async (maSP: number) => {
     const confirmDelete = window.confirm(
       "Bạn chắc chắn muốn xóa sản phẩm này không?"
@@ -83,7 +94,7 @@ const Index = () => {
         const res = await axios.delete(
           `https://localhost:7095/api/GioHangs/xoagh?id=${maSP}`
         );
-        window.location.href = "/Card"; // Tải lại trang sau khi xóa sản phẩm
+        setSanPhams(sansp.filter(item => item.maSP !== maSP));
         return res;
       } catch (error) {
         console.error("Lỗi không xác định:", error);
@@ -91,6 +102,16 @@ const Index = () => {
       }
     }
   };
+
+  const handleQuantityChange = (maSP: number, event: ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    if (value >= 1 && value <= 10) {
+      setSanPhams(sansp.map(sp => sp.maSP === maSP ? { ...sp, soLuong: value } : sp));
+    } else {
+      alert("Số lượng phải từ 1 đến 10");
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -143,9 +164,11 @@ const Index = () => {
                               </div>
                               <input
                                 className="mtext-104 cl3 txt-center num-product"
-                                type="text"
-                                name="num-product1"
-                                defaultValue={item.soLuong}
+                                type="number"
+                                min="1"
+                                max="10"
+                                value={item.soLuong}
+                                onChange={(e) => handleQuantityChange(item.maSP, e)}
                               />
                               <div
                                 className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
