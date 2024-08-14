@@ -11,13 +11,12 @@ import DangKy from "./component/Home/DangKy/DangKy";
 import DangNhap from "./component/Home/DangKy/DangNhap";
 import PaymentForm from "./component/Card/PaymentForm";
 // import { AuthProvider } from './component/Card/AuthContext';
-import PrivateRoute from "./component/Home/DangKy/PrivateRoute"; // Điều chỉnh đường dẫn nếu cần
-import { ToastContainer } from "react-toastify"; // Import ToastContainer
-import "react-toastify/dist/ReactToastify.css"; // Import CSS
-import TTKHH from "./component/Home/DangKy/TTKhH";
-
-import LoadDH from "./component/DonHang/LoadDH";
-import CTDH from "./component/DonHang/CTDH";
+import PrivateRoute from './component/Home/DangKy/PrivateRoute'; // Điều chỉnh đường dẫn nếu cần
+import { ToastContainer } from 'react-toastify'; // Import ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS
+import TTKHH  from './component/Home/DangKy/TTKhH';
+import LoadDH from './component/DonHang/LoadDH';
+import CTDH from './component/DonHang/CTDH';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -75,6 +74,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      
     ],
   },
 ]);

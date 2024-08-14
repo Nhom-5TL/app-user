@@ -191,6 +191,55 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
 }
 
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Đảm bảo rằng font chữ được áp dụng chính xác */
+.mtext-102 {
+  font-size: 16px; /* Thay đổi kích thước font tùy theo yêu cầu */
+  font-weight: 700; /* Trọng lượng font, 700 cho bold */
+  color: #333; /* Màu chữ, có thể điều chỉnh tùy theo thiết kế */
+}
+
+.cl2 {
+  color: #333; /* Màu chữ cho các lớp được áp dụng cùng với mtext-102 */
+}
+
+/* Định dạng cho các nút lọc */
+.filter-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 14px; /* Kích thước font cho các nút lọc */
+  font-family: 'Roboto', sans-serif;
+}
+
+.filter-button.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.apply-filters-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; /* Kích thước font cho nút áp dụng bộ lọc */
+  font-family: 'Roboto', sans-serif;
+}
+
+.apply-filters-button:hover {
+  background-color: #0056b3;
+}
+
+
 
 /*//////////////////////////////////////////////////////////////////
 [ Header ]*/

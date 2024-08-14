@@ -6,6 +6,8 @@ import "./LoadDH.css";
 import { Modal, Button, Table } from "react-bootstrap";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import { setTimeout } from 'timers/promises';
+
+export const LinkImg = "https://localhost:7095/api/SanPhams/get-pro-img/";
 interface ChiTietDonHang {
   maSP: number;
   tensp: string;
@@ -21,6 +23,10 @@ interface ChiTietDonHang {
   ghiChu: string;
   trangThaiThanhToan: string;
   ngayGiao: Date;
+  hinha: string;
+  xaPhuong: string;
+  tinhThanh: string;
+  quanHuyen: string;
 }
 const DonHangUse: React.FC = () => {
   const [donHangs, setDonHangs] = useState<DonH[]>([]);
@@ -28,6 +34,9 @@ const DonHangUse: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<ChiTietDonHang[]>([]);
   // const { maDH } = useParams<{ maDH: string }>();
   const [showModal, setShowModal] = useState(false);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageSize] = useState<number>(10);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -36,10 +45,12 @@ const DonHangUse: React.FC = () => {
       try {
         const maKH = localStorage.getItem("maKH");
         const response = await axios.get(
-          `https://localhost:7095/api/DonHang/DonHUSER?maKH=${maKH}`
+          `https://localhost:7095/api/DonHang/DonHUSER?maKH=${maKH}&pageNumber=${pageNumber}&pageSize=${pageSize}`
         );
         console.log(response.data);
-        setDonHangs(response.data);
+        const data = response.data;
+        setDonHangs(data.data);
+        setTotalRecords(data.totalRecords);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -48,7 +59,7 @@ const DonHangUse: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [pageNumber, pageSize]);
   const HuyDH = async (idDonHang: number) => {
     try {
       if (window.confirm("Bạn có muốn hủy đơn hàng không?")) {
@@ -87,9 +98,14 @@ const DonHangUse: React.FC = () => {
       alert("Không thể lấy chi tiết đơn hàng");
     }
   };
+  const handlePageChange = (newPageNumber: number) => {
+    setPageNumber(newPageNumber);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
+  const totalPages = Math.ceil(totalRecords / pageSize);
 
   return (
     <>
@@ -135,13 +151,16 @@ const DonHangUse: React.FC = () => {
                         <td>{donHang.tensp}</td>
                         <td>
                           <img
-                            src={donHang.hinha}
+                            src={LinkImg + donHang.hinha}
                             alt={donHang.hinha}
                             className="table-img"
                           />
                         </td>
                         <td>{donHang.tenKh}</td>
-                        <td>{donHang.diaChi}</td>
+                        <td>
+                          {donHang.tinhThanh} - {donHang.xaPhuong} -{" "}
+                          {donHang.quanHuyen} - {donHang.diaChi}
+                        </td>
                         <td>{donHang.sdt}</td>
                         <td>{donHang.trangThaiThanhToan}</td>
                         {donHang.tinhTrang == 3 ? (
@@ -214,6 +233,7 @@ const DonHangUse: React.FC = () => {
                               <button
                                 className=" stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15  trans-04 js-addcart-detail"
                                 onClick={() => CTDH(donHang.id)}
+                                style={{ marginBottom: "10px" }}
                               >
                                 CT Đơn Hàng
                               </button>
@@ -241,6 +261,32 @@ const DonHangUse: React.FC = () => {
                     ))}
                   </tbody>
                 </table>
+                <div className="pagination">
+                  <Button
+                    disabled={pageNumber <= 1}
+                    onClick={() => handlePageChange(pageNumber - 1)}
+                  >
+                    Trước
+                  </Button>
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <Button
+                      key={index + 1}
+                      variant={
+                        index + 1 === pageNumber ? "primary" : "secondary"
+                      }
+                      onClick={() => handlePageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </Button>
+                  ))}
+                  <Button
+                    disabled={pageNumber >= totalPages}
+                    onClick={() => handlePageChange(pageNumber + 1)}
+                  >
+                    Sau
+                  </Button>
+                </div>
+
                 <div className="bg0 p-t-104 p-b-116">
                   <Modal
                     className=" p-t-104 "
@@ -271,7 +317,7 @@ const DonHangUse: React.FC = () => {
                               <td>{index + 1}</td>
                               <td>
                                 <img
-                                  src={item.tenKT}
+                                  src={LinkImg + item.hinha}
                                   alt={item.tensp}
                                   className="table-img"
                                 />
@@ -293,6 +339,18 @@ const DonHangUse: React.FC = () => {
                           <h4>Thông tin người đặt</h4>
                           <p>
                             <strong>Địa chỉ:</strong>{" "}
+                            {selectedOrder.length > 0
+                              ? selectedOrder[0].tinhThanh
+                              : ""}{" "}
+                            -{" "}
+                            {selectedOrder.length > 0
+                              ? selectedOrder[0].xaPhuong
+                              : ""}{" "}
+                            -{" "}
+                            {selectedOrder.length > 0
+                              ? selectedOrder[0].quanHuyen
+                              : ""}{" "}
+                            -{" "}
                             {selectedOrder.length > 0
                               ? selectedOrder[0].diaChi
                               : ""}

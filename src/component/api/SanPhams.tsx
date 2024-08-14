@@ -31,7 +31,10 @@ export interface DonH{
     ghiChu: string,
     ngayNhan: Date,
     ngayGiao: Date,
-    ngayHuy: Date
+    ngayHuy: Date,
+    xaPhuong : string,
+    tinhThanh : string,
+    quanHuyen : string,
   }
 // export const getDonHangUse = async () => {
 //     try {
@@ -78,6 +81,7 @@ export interface Sp {
     maKT: number;
     tenKT: string;
     maMS: number;
+    soLuotXem: number;
     soLuong: number;
     kichThuocs: KichThuocs[];
     mauSacs: MauSacs[];

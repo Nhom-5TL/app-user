@@ -1,10 +1,25 @@
-import React, { useState, useEffect } from "react";// Đường dẫn tới file api
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Card_pro from "./Product/Card_pro";
-import axios from 'axios';
 
 interface Loais {
   maLoai: number;
   tenLoai: string;
+}
+
+interface Brands {
+  maNhanHieu: number;
+  tenNhanHieu: string;
+}
+
+interface Sizes {
+  maKichThuoc: number;
+  tenKichThuoc: string;
+}
+
+interface Colors {
+  maMauSac: number;
+  tenMauSac: string;
 }
 
 const Product = () => {
@@ -13,36 +28,73 @@ const Product = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [showSearchItem, setShowSearchItem] = useState("none");
   const [loais, setLoais] = useState<Loais[]>([]);
-  const [selectedLoai, setSelectedLoai] = useState<number | null>(null); // State để lưu mã loại đã chọn
+  const [brands, setBrands] = useState<Brands[]>([]);
+  const [sizes, setSizes] = useState<Sizes[]>([]);
+  const [colors, setColors] = useState<Colors[]>([]);
+  const [selectedLoai, setSelectedLoai] = useState<number | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<number | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [minPrice, setMinPrice] = useState<number | null>(null);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
-    // Gọi API để lấy danh sách loại sản phẩm
-    const fetchLoais = async () => {
+    const fetchData = async () => {
       try {
-        const data = await axios.get(`https://localhost:7095/api/Loais`);
-        setLoais(data.data);
+        // Fetch Loais
+        const loaiResponse = await axios.get(
+          `https://localhost:7095/api/Loais`
+        );
+        setLoais(loaiResponse.data);
+
+        // Fetch Brands
+        const brandResponse = await axios.get(
+          `https://localhost:7095/api/NhanHieux`
+        );
+        setBrands(brandResponse.data);
+
+        // Fetch Sizes
+        const sizeResponse = await axios.get(
+          `https://localhost:7095/api/KichThuocs`
+        );
+        const uniqueSizes = removeDuplicates(sizeResponse.data, "tenKichThuoc");
+        setSizes(uniqueSizes);
+
+        // Fetch Colors
+        const colorResponse = await axios.get(
+          `https://localhost:7095/api/MauSacs`
+        );
+        const uniqueColors = removeDuplicates(colorResponse.data, "tenMauSac");
+        setColors(uniqueColors);
       } catch (error) {
         console.error("Error fetching data", error);
       }
     };
 
-    fetchLoais();
+    fetchData();
   }, []);
 
-  const handleLoaiClick = (maLoai: number) => {
+  const removeDuplicates = (array: any[], key: string) => {
+    return array.filter(
+      (item, index, self) =>
+        index === self.findIndex((t) => t[key] === item[key])
+    );
+  };
+
+  const handleLoaiClick = (maLoai: number | null) => {
     setSelectedLoai(maLoai);
   };
 
-  const handleShowFilter = async () => {
+  const handleShowFilter = () => {
     setShowFilter(!showFilter);
     setShowFilterItem(showFilter ? "none" : "block");
-
     if (showSearch) {
       handleShowSearch();
     }
   };
 
-  const handleShowSearch = async () => {
+  const handleShowSearch = () => {
     setShowSearch(!showSearch);
     setShowSearchItem(showSearch ? "none" : "block");
     if (showFilter) {
@@ -50,22 +102,49 @@ const Product = () => {
     }
   };
 
+  const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value ? Number(e.target.value) : null;
+    if (value !== null && value > 1000000000) {
+      alert('Giá tối thiểu không được vượt quá 1.000.000.000 VND');
+      return;
+    }
+    setMinPrice(value);
+  };
+
+  const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value ? Number(e.target.value) : null;
+    if (value !== null && value > 1000000000) {
+      alert('Giá tối đa không được vượt quá 1.000.000.000 VND');
+      return;
+    }
+    setMaxPrice(value);
+  };
+
+ 
+
   return (
     <>
       <section className="bg0 p-t-23 p-b-140">
-        <div className="container">
-          <div className="p-b-10">
+        <div className="container" style={{marginTop:"20px"}}>
+          <div className="p-b-10" style={{display: 'flex', justifyContent: 'center' }}>
             <h3 className="ltext-103 cl5">Sản phẩm</h3>
           </div>
           <div className="flex-w flex-sb-m p-b-52">
             <div className="flex-w flex-l-m filter-tope-group m-tb-10">
-              <button className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" onClick={() => handleLoaiClick(null)}>
+              <button
+                className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
+                  selectedLoai === null ? "how-active1" : ""
+                }`}
+                onClick={() => handleLoaiClick(null)}
+              >
                 Tất cả sản phẩm
               </button>
               {loais.map((item) => (
                 <button
                   key={item.maLoai}
-                  className="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+                  className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
+                    selectedLoai === item.maLoai ? "how-active1" : ""
+                  }`}
                   onClick={() => handleLoaiClick(item.maLoai)}
                 >
                   {item.tenLoai}
@@ -73,178 +152,155 @@ const Product = () => {
               ))}
             </div>
             <div className="flex-w flex-c-m m-tb-10">
-              <div className="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter" onClick={handleShowFilter}>
+              <div
+                className="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter"
+                onClick={handleShowFilter}
+              >
                 <i className="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list" />
                 <i className="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none" />
-                Filter
+                Bộ Lọc
               </div>
-              <div className="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search" onClick={handleShowSearch}>
+              <div
+                className="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search"
+                onClick={handleShowSearch}
+              >
                 <i className="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search" />
                 <i className="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none" />
-                Search
+                Tìm Kiếm
               </div>
             </div>
             {/* Search product */}
-            <div className="dis-none panel-search w-full p-t-10 p-b-15" style={{ display: showSearchItem }}>
+            <div
+              className="dis-none panel-search w-full p-t-10 p-b-15"
+              style={{ display: showSearchItem }}
+            >
               <div className="bor8 dis-flex p-l-15">
-                <button className="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+                <button
+                  className="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04"
+                  onClick={() => setSearchTerm(searchTerm)}
+                >
                   <i className="zmdi zmdi-search" />
                 </button>
-                <input className="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search" />
+                <input
+                  className="mtext-107 cl2 size-114 plh2 p-r-15"
+                  type="text"
+                  name="search-product"
+                  placeholder="Tìm Kiếm Sản Phẩm"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
             </div>
-            {/* Filter */}
-            <div className="dis-none panel-filter w-full p-t-10" style={{ display: showFilterItem }}>
-              <div className="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
-                <div className="filter-col1 p-r-15 p-b-27">
-                  <div className="mtext-102 cl2 p-b-15">Sort By</div>
-                  <ul>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Default
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Popularity
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Average rating
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04 filter-link-active">
-                        Newness
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Price: Low to High
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Price: High to Low
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="filter-col2 p-r-15 p-b-27">
-                  <div className="mtext-102 cl2 p-b-15">Price</div>
-                  <ul>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04 filter-link-active">
-                        All
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        $0.00 - $50.00
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        $50.00 - $100.00
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        $100.00 - $150.00
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        $150.00 - $200.00
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        $200.00+
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="filter-col3 p-r-15 p-b-27">
-                  <div className="mtext-102 cl2 p-b-15">Color</div>
-                  <ul>
-                    <li className="p-b-6">
-                      <span className="fs-15 lh-12 m-r-6" style={{ color: "#222" }}>
-                        <i className="zmdi zmdi-circle" />
-                      </span>
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Black
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <span className="fs-15 lh-12 m-r-6" style={{ color: "#4272d7" }}>
-                        <i className="zmdi zmdi-circle" />
-                      </span>
-                      <a href="#" className="filter-link stext-106 trans-04 filter-link-active">
-                        Blue
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <span className="fs-15 lh-12 m-r-6" style={{ color: "#b3b3b3" }}>
-                        <i className="zmdi zmdi-circle" />
-                      </span>
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Grey
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <span className="fs-15 lh-12 m-r-6" style={{ color: "#00ad5f" }}>
-                        <i className="zmdi zmdi-circle" />
-                      </span>
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Green
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <span className="fs-15 lh-12 m-r-6" style={{ color: "#fa4251" }}>
-                        <i className="zmdi zmdi-circle" />
-                      </span>
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        Red
-                      </a>
-                    </li>
-                    <li className="p-b-6">
-                      <span className="fs-15 lh-12 m-r-6" style={{ color: "#aaa" }}>
-                        <i className="zmdi zmdi-circle-o" />
-                      </span>
-                      <a href="#" className="filter-link stext-106 trans-04">
-                        White
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="filter-col4 p-b-27">
-                  <div className="mtext-102 cl2 p-b-15">Tags</div>
-                  <div className="flex-w p-t-4 m-r--5">
-                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
-                      Fashion
-                    </a>
-                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
-                      Lifestyle
-                    </a>
-                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
-                      Denim
-                    </a>
-                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
-                      Streetstyle
-                    </a>
-                    <a href="#" className="flex-c-m stext-106 cl6 size-301 bor3 trans-04 m-r-5 m-b-5">
-                      Crafts
-                    </a>
-                  </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <div className="row isotope-grid">
-            <Card_pro selectedLoai={selectedLoai} />
+           {/* Filter */}
+<div className="panel-filter w-full p-t-10" style={{ display: showFilterItem }}>
+  <div className="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
+    {/* Thương hiệu */}
+    <div className="filter-col1 p-r-15 p-b-27">
+      <div className="mtext-102 cl2 p-b-15">THƯƠNG HIỆU</div>
+      <div className="filter-options">
+        {brands.map((brand) => (
+          <button
+            key={brand.maNhanHieu}
+            className={`filter-button ${selectedBrand === brand.maNhanHieu ? "active" : ""}`}
+            onClick={() =>
+              setSelectedBrand(
+                selectedBrand === brand.maNhanHieu
+                  ? null
+                  : brand.maNhanHieu
+              )
+            }
+          >
+            {brand.tenNhanHieu}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Kích thước */}
+    <div className="filter-col2 p-r-15 p-b-27">
+      <div className="mtext-102 cl2 p-b-15">KÍCH THƯỚC</div>
+      <div className="filter-options">
+        {sizes.map((size) => (
+          <button
+            key={size.maKichThuoc}
+            className={`filter-button ${selectedSize === size.tenKichThuoc ? "active" : ""}`}
+            onClick={() =>
+              setSelectedSize(
+                selectedSize === size.tenKichThuoc
+                  ? null
+                  : size.tenKichThuoc
+              )
+            }
+          >
+            {size.tenKichThuoc}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Màu sắc */}
+    <div className="filter-col3 p-r-15 p-b-27">
+      <div className="mtext-102 cl2 p-b-15">MÀU SẮC</div>
+      <div className="filter-options">
+        {colors.map((color) => (
+          <button
+            key={color.maMauSac}
+            className={`filter-button ${selectedColor === color.tenMauSac ? "active" : ""}`}
+            onClick={() =>
+              setSelectedColor(
+                selectedColor === color.tenMauSac
+                  ? null
+                  : color.tenMauSac
+              )
+            }
+          >
+            {color.tenMauSac}
+          </button>
+        ))}
+      </div>
+    </div>
+
+
+    {/* Khoảng giá */}
+    <div className="filter-col4 p-r-15 p-b-27">
+      <div className="mtext-102 cl2 p-b-15">KHOẢNG GIÁ</div>
+      <div>
+        <label>Giá tối thiểu:</label>
+        <input
+          type="number"
+          max={10000000000}
+          onChange={handleMinPriceChange}
+        />
+      </div>
+      <div>
+        <label>Giá tối đa:</label>
+        <input
+          type="number"
+          max={10000000000}
+          onChange={handleMaxPriceChange}
+        />
+      </div>
+    </div>
+
+   
+  </div>
+</div>
+
           </div>
+
+          <div className="row isotope-grid">
+            <Card_pro
+              selectedLoai={selectedLoai}
+              selectedBrand={selectedBrand}
+              selectedSize={selectedSize}
+              selectedColor={selectedColor}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              searchTerm={searchTerm}
+            />
+          </div>
+          {/* Load more */}
+        
         </div>
       </section>
     </>
