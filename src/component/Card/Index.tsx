@@ -137,6 +137,7 @@ const Index = () => {
                         <th className="column-1">Sản Phẩm</th>
                         <th className="column-2" />
                         <th className="column-3">Size</th>
+                        <th className="column-3">Màu</th>
                         <th className="column-3">Giá</th>
                         <th className="column-4">Số Lượng</th>
                         <th className="column-5">Tổng Tiền</th>
@@ -153,6 +154,7 @@ const Index = () => {
                           </td>
                           <td className="column-2">{item.tenSP}</td>
                           <td className="column-2">{item.tenKT}</td>
+                          <td className="column-2">{item.tenMS}</td>
                           <td className="column-3">{item.gia} ₫</td>
                           <td className="column-4">
                             <div className="wrap-num-product flex-w m-l-auto m-r-0">

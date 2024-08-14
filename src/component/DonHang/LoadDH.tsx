@@ -35,9 +35,9 @@ const DonHangUse: React.FC = () => {
   // const { maDH } = useParams<{ maDH: string }>();
   const [showModal, setShowModal] = useState(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageSize] = useState<number>(10);
+  const [pageSize] = useState<number>(5);
   const [totalRecords, setTotalRecords] = useState<number>(0);
-
+  const [matt, setTT] = useState<number>(0);
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
   useEffect(() => {
@@ -45,7 +45,7 @@ const DonHangUse: React.FC = () => {
       try {
         const maKH = localStorage.getItem("maKH");
         const response = await axios.get(
-          `https://localhost:7095/api/DonHang/DonHUSER?maKH=${maKH}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+          `https://localhost:7095/api/DonHang/DonHUSER?matt=${matt}&maKH=${maKH}&pageNumber=${pageNumber}&pageSize=${pageSize}`
         );
         console.log(response.data);
         const data = response.data;
@@ -59,7 +59,7 @@ const DonHangUse: React.FC = () => {
     };
 
     fetchData();
-  }, [pageNumber, pageSize]);
+  }, [matt,pageNumber, pageSize]);
   const HuyDH = async (idDonHang: number) => {
     try {
       if (window.confirm("Bạn có muốn hủy đơn hàng không?")) {
@@ -101,7 +101,9 @@ const DonHangUse: React.FC = () => {
   const handlePageChange = (newPageNumber: number) => {
     setPageNumber(newPageNumber);
   };
-
+  const handleMatt = (newMatt: number) => {
+    setTT(newMatt);
+  };
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -115,6 +117,16 @@ const DonHangUse: React.FC = () => {
             <div className="container bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
               <div>
                 <h1>Danh sách Đơn Hàng</h1>
+                <div className="pagination">
+                <Button className="btn btn-outline-info" onClick={() => handleMatt(0)}>Đang xử lý</Button>
+                <Button className="btn btn-outline-info" onClick={() => handleMatt(1)}>Đang giao</Button>
+                <Button
+                  className="btn btn-outline-info"
+                  onClick={() => handleMatt(2)}
+                >
+                  Hoàn thành
+                </Button>
+              </div>
                 <table>
                   <thead>
                     <tr>
@@ -206,14 +218,14 @@ const DonHangUse: React.FC = () => {
                             <td>{donHang.ghiChu}</td>
                             <td>
                               <button
-                                className="cancel-order-button"
+                                className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"
                                 onClick={() => CTDH(donHang.id)}
                               >
                                 CT Đơn Hàng
                               </button>
                             </td>
                           </>
-                        ) : (
+                        ) : donHang.tinhTrang == 1 ? (
                           <>
                             <td>Đơn Hàng Đang Giao</td>
                             <td>
@@ -245,18 +257,41 @@ const DonHangUse: React.FC = () => {
                               </button>
                             </td>
                           </>
-                        )}
-
-                        {/* <td>{new Date(donHang.ngayNhan).toLocaleDateString()}</td> */}
-                        {/* <td>{new Date(donHang.ngayGiao).toLocaleDateString()}</td> */}
-                        {/* <td>{donHang.ngayHuy ? new Date(donHang.ngayHuy).toLocaleDateString() : 'Chưa Hủy'}</td> */}
-                        {/* <td>{donHang.ghiChu}</td> */}
-                        {/* <td> 
-                            {donHang.tinhTrang == 3 || donHang.tinhTrang == 2 ? (
-                                ""
-                            ): (
-                                <button className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" onClick={() => HuyDH(donHang.id)}>Hủy Đơn Hàng</button>
-                            )}</td> */}
+                        ) 
+                        : (
+                          <>
+                            <td>Đơn Hàng Đang Xử Lý</td>
+                            <td>
+                              {new Date(donHang.ngayGiao).toLocaleDateString(
+                                "en-GB"
+                              )}
+                            </td>
+                            <td>
+                              {donHang.ngayNhan
+                                ? new Date(donHang.ngayNhan).toLocaleDateString(
+                                    "en-GB"
+                                  )
+                                : "Chưa nhận"}
+                            </td>
+                            <td>{donHang.ghiChu}</td>
+                            <td>
+                              <button
+                                className=" stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15  trans-04 js-addcart-detail"
+                                onClick={() => CTDH(donHang.id)}
+                                style={{ marginBottom: "10px" }}
+                              >
+                                CT Đơn Hàng
+                              </button>
+                              <button
+                                className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"
+                                onClick={() => HuyDH(donHang.id)}
+                              >
+                                Hủy Đơn Hàng
+                              </button>
+                            </td>
+                          </>
+                        )
+                        }
                       </tr>
                     ))}
                   </tbody>

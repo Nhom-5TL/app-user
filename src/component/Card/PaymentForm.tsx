@@ -304,8 +304,11 @@ const PaymentForm: React.FC = () => {
                     "https://localhost:7095/api/GioHangs/CreateOrder",
                     donHangPost2
                 );
+                
                 alert("Tạo đơn hàng thành công!");
                 setSuccess("Đơn hàng đã được tạo thành công.");
+                localStorage.removeItem('cartItems')
+                sessionStorage.removeItem('cartCount')
                 setError(null);
                 navigate("/");
             }
@@ -418,7 +421,7 @@ const PaymentForm: React.FC = () => {
                             <tr>
                                 <th>Sản phẩm</th>
                                 <th>Size</th>
-                                <th>Color</th>
+                                <th>Màu</th>
                                 <th>Giá</th>
                                 <th>Số lượng</th>
                                 <th>Tổng tiền</th>
