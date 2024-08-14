@@ -55,6 +55,7 @@ const Card_pro: React.FC<Card_proProps> = ({ selectedLoai }) => {
 
   const CtWeb = async (maSP: number) => {
     try {
+      await axios.post(`https://localhost:7095/api/SanPhams/update-views/${maSP}`);
       const response = await axios.get<Sp[]>(`https://localhost:7095/api/SanPhams/${maSP}`);
       setSanPhams(response.data);
       navigate(`/${maSP}`);

@@ -78,6 +78,7 @@ export interface Sp {
     maKT: number;
     tenKT: string;
     maMS: number;
+    soLuotXem: number;
     soLuong: number;
     kichThuocs: KichThuocs[];
     mauSacs: MauSacs[];

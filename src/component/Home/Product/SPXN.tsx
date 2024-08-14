@@ -3,11 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Sp } from '../../api/SanPhams';
 import axios from 'axios';
 
-interface SPLQProps {
-    excludeId: number; // Prop để nhận ID sản phẩm hiện tại và lọc ra
-}
-
-const SPLQ: React.FC<SPLQProps> = ({ excludeId }) => {
+const SPXN: React.FC<SPLQProps> = ({ excludeId }) => {
     const [sansp, setSanPhams] = useState<Sp[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -17,7 +13,13 @@ const SPLQ: React.FC<SPLQProps> = ({ excludeId }) => {
         const fetchSanPhams = async () => {
             try {
                 const response = await axios.get<Sp[]>("https://localhost:7095/api/SanPhams");
-                setSanPhams(response.data.filter(item => item.maSP !== excludeId)); // Lọc sản phẩm hiện tại
+                // Sắp xếp và giới hạn số lượng sản phẩm
+                const sortedProducts = response.data
+                    .filter(item => item.maSP !== excludeId) // Lọc sản phẩm hiện tại
+                    .sort((a, b) => b.soLuotXem - a.soLuotXem) // Sắp xếp theo số lượt xem giảm dần
+                    .slice(0, 4); // Lấy 4 sản phẩm đầu tiên
+
+                setSanPhams(sortedProducts);
                 setLoading(false);
             } catch (err) {
                 setError('Failed to fetch products');
@@ -28,11 +30,14 @@ const SPLQ: React.FC<SPLQProps> = ({ excludeId }) => {
         fetchSanPhams();
     }, [excludeId]);
 
-
     const handleViewDetails = async (maSP: number) => {
-        // Gọi API để cập nhật số lượt xem
-        await axios.post(`https://localhost:7095/api/SanPhams/update-views/${maSP}`);
-        navigate(`/${maSP}`);
+        try {
+            // Gọi API để cập nhật số lượt xem
+            await axios.post(`https://localhost:7095/api/SanPhams/update-views/${maSP}`);
+            navigate(`/${maSP}`);
+        } catch (err) {
+            console.error('Failed to update views', err);
+        }
     };
 
     if (loading) return <div>Loading...</div>;
@@ -40,7 +45,7 @@ const SPLQ: React.FC<SPLQProps> = ({ excludeId }) => {
 
     return (
         <>
-            {sansp.slice(0, 4).map((item) => (
+            {sansp.map((item) => (
                 <div className="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" key={item.maSP}>
                     <div className="block2">
                         <div className="block2-pic hov-img0">
@@ -67,4 +72,4 @@ const SPLQ: React.FC<SPLQProps> = ({ excludeId }) => {
     );
 };
 
-export default SPLQ;
+export default SPXN;

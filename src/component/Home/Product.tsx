@@ -53,8 +53,8 @@ const Product = () => {
   return (
     <>
       <section className="bg0 p-t-23 p-b-140">
-        <div className="container">
-          <div className="p-b-10">
+        <div className="container" style={{marginTop:"20px"}}>
+          <div className="p-b-10" style={{display: 'flex', justifyContent: 'center' }}>
             <h3 className="ltext-103 cl5">Sản phẩm</h3>
           </div>
           <div className="flex-w flex-sb-m p-b-52">
@@ -242,7 +242,7 @@ const Product = () => {
                 </div>
               </div>
             </div>
-          <div className="row isotope-grid">
+          <div className="row isotope-grid" >
             <Card_pro selectedLoai={selectedLoai} />
           </div>
         </div>
