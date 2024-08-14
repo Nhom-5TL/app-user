@@ -206,7 +206,7 @@ const DonHangUse: React.FC = () => {
                             <td>{donHang.ghiChu}</td>
                             <td>
                               <button
-                                className="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"
+                                className="cancel-order-button"
                                 onClick={() => CTDH(donHang.id)}
                               >
                                 CT Đơn Hàng

@@ -113,15 +113,10 @@ const Header = () => {
                 <ul className="main-menu">
                   <li className="active-menu">
                     <a href="/">Trang Chủ</a>
-                    <ul className="sub-menu">
-                      <li><a href="/">Trang Chủ</a></li>
-                      <li><a href="home-02.html">Homepage 2</a></li>
-                      <li><a href="home-03.html">Homepage 3</a></li>
-                    </ul>
                   </li>
                   <li><a href="/shop">Sản Phẩm</a></li>
                   {user ?(
-                    <li className="label1" data-label1="hot"><a href="\loadDH">DonHang</a></li>
+                    <li><a href="\loadDH">DonHang</a></li>
                   ): (
                     ""
                   )}

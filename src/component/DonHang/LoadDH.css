@@ -19,3 +19,24 @@ th {
     height: 100px; /* Đảm bảo rằng chiều cao và chiều rộng đều được chỉ định để giữ kích thước hình ảnh cố định */
     object-fit: cover; /* Giúp hình ảnh không bị biến dạng và lấp đầy khung hình */
 }
+.order-details-section {
+    background-color: #fff; /* White background */
+    padding: 20px; /* Optional: Add padding for spacing */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow */
+  }
+  
+  .cancel-order-button {
+    background-color: #fff; /* White background for the button */
+    border: 1px solid #ddd; /* Optional: Add border to the button */
+    color: #fafcfd; /* Optional: Change text color */
+  }
+  
+  .pagination {
+    background-color: #fff; /* White background for pagination */
+    padding: 10px; /* Optional: Add padding for spacing */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow */
+  }
+  
+  
